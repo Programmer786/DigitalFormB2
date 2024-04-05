@@ -1,0 +1,128 @@
+{% extends "Administrator/layout.html" %}
+{% block body %} 
+                  <!-- Work/Task Area container-fluid inner -->
+                  <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                              <h2 class="d-inline-block">View Complaint & Details</h2>
+                           </div>
+                        </div>
+                     </div>
+
+
+                     <!-- start row -->
+                     <div class="row">
+                        <!-- start table section Hover Table -->
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Complaint Details</h2>
+                                 </div>
+                              </div>
+                              <div class="table_section padding_infor_info">
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                       <thead class="thead-light">
+                                          <tr>
+                                             <th>Id#</th>
+                                             <th>Title</th>
+                                             <th>Send Details</th>
+                                             <th>Send Details</th>
+                                             <th>Status</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for complaint in complaint_data_retrieve %}
+                                          <tr>
+                                             <td>{{complaint.comp_id}}</td>
+                                             <td>{{complaint.title}}</td>
+                                             <td>{{complaint.send_details}}</td>
+                                             <td>
+                                                {% if complaint.received_details is none or complaint.received_details == "" %}
+                                                   <a href="#" data-toggle="modal" data-target="#updateComplaintResponseModal{{ complaint.comp_id }}" class="btn btn-primary btn-circle btn-block btn-md">
+                                                      <i class="fa fa-edit"> Response</i>
+                                                   </a>
+                                                {% else %}
+                                                   {{complaint.received_details}}
+                                                {% endif %}
+                                             </td>
+                                             <td>
+                                                {% if complaint.status == 'Pending' %}
+                                                <button type="button" class="btn btn-warning btn-sm">{{complaint.status}}</button>
+                                                {% elif complaint.status == 'Rejected' %}
+                                                <button type="button" class="btn btn-danger btn-sm">{{complaint.status}}</button>
+                                                {% else %}
+                                                <button type="button" class="btn btn-success btn-sm">{{complaint.status}}</button>
+                                                {% endif %}
+                                             </td>
+                                          </tr>
+                                          <!-- Add a modal for Add New User -->
+                                          <div class="modal fade" id="updateComplaintResponseModal{{ complaint.comp_id }}" tabindex="-1" role="dialog" aria-labelledby="updateComplaintResponseModalLabel" aria-hidden="true">
+                                             <div class="modal-dialog modal-md" role="document">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                         <h5 class="modal-title" id="updateComplaintResponseModalLabel">Complaint Response</h5>
+                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                         </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                         <!-- Form to Add Employee -->
+                                                         <form action="{{url_for('update_admin_complaint', CompId=complaint.comp_id)}}" method="post">
+                                                            <div class="row mt-3">
+                                                               <div class="col-md-12">
+                                                                   <label for="exampleInputRD" style="color: black;"><b>Complaint Title *</b></label>
+                                                                   <input type="text" class="form-control" name="complaint_title" value="{{complaint.title}}" placeholder="Name" required readonly/>
+                                                               </div>
+                                                           </div>
+                                                           <div class="row mt-3">
+                                                               <div class="col-md-12">
+                                                                   <label for="exampleInputRD" style="color: black;"><b>Complaint Details *</b></label>
+                                                                   <textarea class="form-control" name="complaint_details" rows="5" placeholder="Please Write Down Complaint Details" required readonly>{{complaint.send_details}}</textarea>
+                                                               </div>
+                                                           </div>
+                                                           <div class="row mt-3">
+                                                               <div class="col-md-12">
+                                                                  <label for="exampleInputRD" style="color: black;"><b>Complaint Response *</b></label>
+                                                                  <textarea class="form-control" name="complaint_response" rows="5" placeholder="Please Write Down Complaint Response" required></textarea>
+                                                               </div>
+                                                           </div>
+                                                           <div class="row mt-3">
+                                                               <div class="col-md-12">
+                                                                  <label for="exampleInputRD" style="color: black;"><b>Status *</b></label>
+                                                                  <select name="status" class="form-control" required>
+                                                                     <option value="Corrected" selected>Corrected</option>
+                                                                     <option value="Rejected">Rejected</option>
+                                                                  </select>
+                                                               </div>
+                                                           </div>
+                                                           
+                                                           <div class="row mt-3">
+                                                               <div class="col-md-12 col-sm-12"> 
+                                                                   <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Complaint Response Submit</b></button> 
+                                                               </div>
+                                                           </div>
+                                                         </form>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <!-- End Add a modal for Add New User -->
+
+                                       {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end table section Hover Table -->
+                     </div>
+                     <!-- end row -->
+
+                     
+                  </div>
+                  
+{% endblock %}                 

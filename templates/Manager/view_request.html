@@ -1,0 +1,167 @@
+{% extends "Manager/manager_layout.html" %}
+{% block body %} 
+                  <!-- Work/Task Area container-fluid inner -->
+                  <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                              <h2 class="d-inline-block">Apply To Form-B & Details</h2>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- start row -->
+                     <div class="row">
+                        <!-- start table section Hover Table -->
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Form-B Details</h2>
+                                 </div>
+                              </div>
+                              <div class="table_section padding_infor_info">
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                       <thead class="thead-light">
+                                          <tr>
+                                             <th>Id#</th>
+                                             <th>F.Name</th>
+                                             <th>F.CNIC</th>
+                                             <th>M.Name</th>
+                                             <th>M.CNIC</th>
+                                             <th>Parent Comment</th>
+                                             <th>Status</th>
+                                             <th>View</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for formb in forward_to_admin_0 %}
+                                          <tr>
+                                             <td>{{formb.par_id}}</td>
+                                             <td>{{formb.father_name}}</td>
+                                             <td>{{formb.father_cnic}}</td>
+                                             <td>{{formb.mother_name}}</td>
+                                             <td>{{formb.mother_cnic}}</td>
+                                             <td>{{formb.send_comment}}</td>
+                                             <td>
+                                                {% if formb.status == 'Pending' %}
+                                                <button type="button" class="btn btn-warning btn-sm">{{formb.status}}</button>
+                                                {% elif formb.status == 'Processing' %}
+                                                <button type="button" class="btn btn-info btn-sm">{{formb.status}}</button>
+                                                {% elif formb.status == 'Rejected' %}
+                                                <button type="button" class="btn btn-danger btn-sm">{{formb.status}}</button>
+                                                {% else %}
+                                                <button type="button" class="btn btn-success btn-sm">{{formb.status}}</button>
+                                                {% endif %}
+                                             </td>
+                                             <td>
+                                                <a href="#" data-toggle="modal" data-target="#viewFormBDataModal{{ formb.par_id }}" class="btn btn-primary btn-circle btn-block btn-md">
+                                                   <i class="fa fa-eye"> View Form-B</i>
+                                                </a>
+                                             </td>
+                                          </tr>
+
+                                          <!-- View a modal for View Form B -->
+                                          <div class="modal fade" id="viewFormBDataModal{{ formb.par_id }}" tabindex="-1" role="dialog" aria-labelledby="viewFormBDataModalLabel" aria-hidden="true">
+                                             <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                         <h5 class="modal-title" id="viewFormBDataModalLabel">View Form-B </h5>
+                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                         </button>
+                                                   </div>
+                                                   <div class="modal-body">
+
+                                                      <div class="row mt-3">
+                                                         <div class="col-md-6">
+                                                               <label for="exampleInputRD" style="color: black;"><b>Father Name *</b></label>
+                                                               <input type="text" class="form-control" value="{{formb.father_name}}" readonly required/>
+                                                         </div>
+                                                         <div class="col-md-6">
+                                                            <label for="exampleInputRD" style="color: black;"><b>Father CNIC *</b></label>
+                                                            <input type="text" class="form-control" value="{{formb.father_cnic}}" readonly required/>
+                                                         </div>
+                                                      </div>
+                                                      <div class="row mt-3">
+                                                         <div class="col-md-6">
+                                                               <label for="exampleInputRD" style="color: black;"><b>Mother Name *</b></label>
+                                                               <input type="text" class="form-control" value="{{formb.mother_name}}" readonly required/>
+                                                         </div>
+                                                         <div class="col-md-6">
+                                                            <label for="exampleInputRD" style="color: black;"><b>Mother CNIC *</b></label>
+                                                            <input type="text" class="form-control" value="{{formb.mother_cnic}}" readonly required/>
+                                                         </div>
+                                                      </div>
+                                                      
+                                                      <hr style="border-top: 3px solid #00ff1e;" />
+
+                                                      <div class="row mt-3">
+                                                         <div class="col-md-1">
+                                                            <label for="exampleInputRD" style="color: black;"><b>S.No</b></label>
+                                                         </div>
+                                                         <div class="col-md-4">
+                                                               <label for="exampleInputRD" style="color: black;"><b>Child Name *</b></label>
+                                                         </div>
+                                                         <div class="col-md-4">
+                                                            <label for="exampleInputRD" style="color: black;"><b>Date of Birth *</b></label>
+                                                         </div>
+                                                         <div class="col-md-3">
+                                                            <label for="exampleInputRD" style="color: black;"><b>Gender *</b></label>
+                                                         </div>
+                                                      </div> 
+                                                      <hr style="border-top: 1px solid #000000;" />
+                                                      {% for child in childs_formb_data_retrieve %}
+                                                         {% if child.par_id == formb.par_id %}  
+                                                            <!-- Form to View Form B -->                                              
+                                                            <div class="row mt-3">
+                                                               <div class="col-md-1">
+                                                                  <input type="text" class="form-control" value="{{loop.index}}" readonly required/>   
+                                                               </div>
+                                                               <div class="col-md-4">
+                                                                     <input type="text" class="form-control" value="{{child.child_name}}" readonly required/>
+                                                               </div>
+                                                               <div class="col-md-4">
+                                                                  <input type="text" class="form-control" value="{{child.child_name}}" readonly required/>
+                                                               </div>
+                                                               <div class="col-md-3">
+                                                                  <input type="text" class="form-control" value="{{child.child_name}}" readonly required/>   
+                                                               </div>
+                                                            </div>   
+                                                         {% endif %}  
+                                                      {% endfor %}
+                                                      <hr style="border-top: 3px solid #00ff1e;" />
+                                                      <div class="row mt-3">
+                                                         <div class="col-md-6 col-sm-12"> 
+                                                            <a href="{{url_for('form_forward_to_admin', ParId=formb.par_id)}}" class="btn btn-success btn-lg btn-block">
+                                                               <i class="fa fa-handshake"> Forward To Admin</i>
+                                                            </a>
+                                                         </div>
+                                                         <div class="col-md-6 col-sm-12"> 
+                                                            <a href="{{url_for('rejected_submitted_form', ParId=formb.par_id)}}" class="btn btn-danger btn-lg btn-block">
+                                                               <i class="fa fa-trash"> Rejected</i>
+                                                            </a>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <!-- End view a modal for View Form B -->
+
+                                       {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end table section Hover Table -->
+                     </div>
+                     <!-- end row -->
+
+                     
+                  </div>
+                  
+{% endblock %}                 

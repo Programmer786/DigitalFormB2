@@ -1,0 +1,71 @@
+{% extends "Administrator/layout.html" %}
+{% block body %} 
+                  <!-- Work/Task Area container-fluid inner -->
+                  <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                              <h2 class="d-inline-block">Apply To Form-B & Details</h2>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- start row -->
+                     <div class="row">
+                        <!-- start table section Hover Table -->
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Form-B Details</h2>
+                                 </div>
+                              </div>
+                              <div class="table_section padding_infor_info">
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                       <thead class="thead-light">
+                                          <tr>
+                                             <th>Id#</th>
+                                             <th>F.Name</th>
+                                             <th>F.CNIC</th>
+                                             <th>M.Name</th>
+                                             <th>M.CNIC</th>
+                                             <th>Status</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for formb in forward_to_admin_0 %}
+                                          <tr>
+                                             <td>{{formb.par_id}}</td>
+                                             <td>{{formb.father_name}}</td>
+                                             <td>{{formb.father_cnic}}</td>
+                                             <td>{{formb.mother_name}}</td>
+                                             <td>{{formb.mother_cnic}}</td>
+                                             <td>
+                                                {% if formb.status == 'Pending' %}
+                                                <button type="button" class="btn btn-warning btn-sm">{{formb.status}}</button>
+                                                {% elif formb.status == 'Processing' %}
+                                                <button type="button" class="btn btn-info btn-sm">{{formb.status}}</button>
+                                                {% elif formb.status == 'Rejected' %}
+                                                <button type="button" class="btn btn-danger btn-sm">{{formb.status}}</button>
+                                                {% else %}
+                                                <button type="button" class="btn btn-success btn-sm">{{formb.status}}</button>
+                                                {% endif %}
+                                             </td>
+                                          </tr>
+
+                                       {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end table section Hover Table -->
+                     </div>
+                     <!-- end row -->
+
+                     
+                  </div>
+                  
+{% endblock %}                 
