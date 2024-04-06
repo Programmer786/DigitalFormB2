@@ -141,7 +141,8 @@
                         <div class="right_topbar">
                            <div class="icon_info">
                               <ul>
-                                 <!-- <li><a href="#"><i class="far fa-bell"></i><span class="badge">2</span></a></li> -->
+                                 <li><a href="#" data-toggle="modal" data-target="#notificationModal"><i class="far fa-bell"></i><span class="badge">2</span></a></li>
+
                               </ul>
                               <ul class="user_profile_dd">
                                  <li>
@@ -215,6 +216,27 @@
                               <div class="modal-footer">
                                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                                  <a class="btn btn-primary" href="/logout_parent">Logout</a>
+                              </div>
+                        </div>
+                     </div>
+                  <!-- END Logout Modal-->
+                  </div>
+
+                  <!-- Notification Modal-->
+                  <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                     <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLabel">Read Notification</h5>
+                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">Message: if you are ready to end your current session.</div>
+                              <div class="modal-footer">
+                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                 <a class="btn btn-primary" href="#">Read</a>
                               </div>
                         </div>
                      </div>
