@@ -5,81 +5,39 @@
                      <div class="row column_title">
                         <div class="col-md-12">
                            <div class="page_title">
-                              <h2 class="d-inline-block">Apply To Form-B & Details</h2>
-                              <a href="#" data-toggle="modal" data-target="#addNewChildModal" class="btn btn-primary btn-lg float-right">Add New Child</a>
-                              <a href="#" data-toggle="modal" data-target="#addParentDataModal" style="margin-right: 10px;" class="btn btn-success btn-lg float-right">Add For Parent</a>
+                              <h2 class="d-inline-block">Apply To Form-B With Authentication & Details</h2>
+                              <a href="#" data-toggle="modal" data-target="#addNewChildModal" class="btn btn-primary btn-lg float-right">Add New Child With Authentication</a>
                            </div>
                         </div>
                      </div>
-
-                     <!-- Add a modal for Add New addParentDataModal -->
-                     <div class="modal fade" id="addParentDataModal" tabindex="-1" role="dialog" aria-labelledby="addParentDataModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-md" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addParentDataModalLabel">Add One time Parent Data</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Form to Add Employee -->
-                                    <form action="/add_one_time_parent_data" method="post">
-                                        <div class="row mt-3">
-                                            <div class="col-md-12">
-                                                <label for="exampleInputRD" style="color: black;"><b>Father Name *</b></label>
-                                                <input type="text" class="form-control" name="father_name" placeholder="Father Name" required/>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                          <div class="col-md-12">
-                                              <label for="exampleInputRD" style="color: black;"><b>Father Name *</b></label>
-                                              <input type="text" class="form-control" name="father_cnic" placeholder="11101xxxxxxx3" onkeypress="return onlyNumberKey(event)" maxlength="13" required/>
-                                          </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                          <div class="col-md-12">
-                                              <label for="exampleInputRD" style="color: black;"><b>Mother Name *</b></label>
-                                              <input type="text" class="form-control" name="mother_name" placeholder="Mother Name" required/>
-                                          </div>
-                                       </div>
-                                       <div class="row mt-3">
-                                          <div class="col-md-12">
-                                             <label for="exampleInputRD" style="color: black;"><b>Father Name *</b></label>
-                                             <input type="text" class="form-control" name="mother_cnic" placeholder="11101xxxxxxx3" onkeypress="return onlyNumberKey(event)" maxlength="13" required/>
-                                          </div>
-                                       </div>
-                                       <div class="row mt-3">
-                                          <div class="col-md-12">
-                                             <label for="exampleInputRD" style="color: black;"><b>Request Comment *</b></label>
-                                             <textarea class="form-control" name="request_comment" rows="5" placeholder="Please Write Down Request Comment" required></textarea>
-                                          </div>
-                                      </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12 col-sm-12"> 
-                                                <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Add Parent Data</b></button> 
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                     </div>
-                     <!-- End Add a modal for Add addParentDataModal -->
 
                      <!-- Add a modal for Add New addNewChildModal -->
                      <div class="modal fade" id="addNewChildModal" tabindex="-1" role="dialog" aria-labelledby="addNewChildModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-md" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addNewChildModalLabel">Add New Child</h5>
+                                    <h5 class="modal-title" id="addNewChildModalLabel">Add New Child With Parent Finger Matching</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <!-- Form to Add Employee -->
-                                    <form action="/add_new_child" method="post">
+                                    <!-- Form to Add addNewChildModal  -->
+                                    <form action="/add_new_child_with_authentication" method="post" enctype="multipart/form-data">
+                                       <div class="row mt-3" style="border-style: double; border-color: green; padding: 10px;">
+                                          <div class="col-md-4">
+                                              <label for="exampleInputRD" style="color: black;"><b>Select Parent *</b></label>
+                                              <select name="select_parent_type" class="form-control" required>
+                                                <option value="Father" selected>Father</option>
+                                                <option value="Mother">Mother</option>
+                                             </select>
+                                          </div>
+                                          <div class="col-md-8">
+                                             <label for="exampleInputRD" style="color: black;"><b>Upload Finger For Authentication *</b></label>
+                                             <input type="file" class="form-control-file" name="finger_print_sample" accept=".BMP" required/>
+                                          </div>
+                                       </div>
+
                                         <div class="row mt-3">
                                             <div class="col-md-12">
                                                 <label for="exampleInputRD" style="color: black;"><b>Child Name *</b></label>
@@ -114,70 +72,6 @@
                      <!-- End Add a modal for Add addNewChildModal -->
 
 
-                     <!-- start row -->
-                     <div class="row">
-                        <!-- start table section Hover Table -->
-                        <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Parent Details</h2>
-                                    {% if parent_data_retrieve.status == 'Pending' %}
-                                    <button type="button" class="btn btn-warning btn-md">{{parent_data_retrieve.status}}</button>
-                                    {% elif parent_data_retrieve.status == 'Processing' %}
-                                    <button type="button" class="btn btn-info btn-md">{{parent_data_retrieve.status}}</button>
-                                    {% elif parent_data_retrieve.status == 'Rejected' %}
-                                    <button type="button" class="btn btn-danger btn-md">{{parent_data_retrieve.status}}</button>
-                                    <a href="#" data-toggle="modal" data-target="#submitRequestForFormBModal{{ session.p_UserId }}" class="btn btn-primary btn-circle btn-block btn-md">
-                                       <i class="fa fa-hand-o-up"> Request For FormB</i>
-                                    </a>
-                                    <!-- Request a modal for Request For FormB -->
-                                    <div class="modal fade" id="submitRequestForFormBModal{{ session.p_UserId }}" tabindex="-1" role="dialog" aria-labelledby="submitRequestForFormBModalLabel" aria-hidden="true">
-                                       <div class="modal-dialog modal-md" role="document">
-                                          <div class="modal-content">
-                                             <div class="modal-header">
-                                                   <h5 class="modal-title" id="submitRequestForFormBModalLabel">Send Request For FormB</h5>
-                                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                   </button>
-                                             </div>
-                                             <div class="modal-body">
-                                                   <form action="{{url_for('request_for_formb', UserId=session.p_UserId)}}" method="post">
-                                                      <div class="row mt-3">
-                                                         <div class="col-md-12">
-                                                            <label for="exampleInputRD" style="color: black;"><b>Request Comment *</b></label>
-                                                            <textarea class="form-control" name="request_comment" rows="5" placeholder="Please Write Down Request Comment" required></textarea>
-                                                         </div>
-                                                     </div>
-                                                     
-                                                     <div class="row mt-3">
-                                                         <div class="col-md-12 col-sm-12"> 
-                                                             <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Send Request For FormB</b></button> 
-                                                         </div>
-                                                     </div>
-                                                   </form>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <!-- Request Add a modal Request For FormB -->
-
-                                    {% else %}
-                                    <button type="button" class="btn btn-success btn-md">{{parent_data_retrieve.status}}</button>
-                                    {% endif %}
-                                 </div>
-                              </div>
-                              <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <h3>Father Name: <span style="background-color: chartreuse;">{{parent_data_retrieve.father_name}}</span> ------->> Father CNIC: <span style="background-color: chartreuse;">{{parent_data_retrieve.father_cnic}}</span></h3>
-                                    <h3>Mother Name: <span style="background-color: chartreuse;">{{parent_data_retrieve.mother_name}}</span> ------->> Mother CNIC: <span style="background-color: chartreuse;">{{parent_data_retrieve.mother_cnic}}</span></h3>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <!-- end table section Hover Table -->
-                     </div>
-                     <!-- end row -->
 
 
 

@@ -5,12 +5,52 @@
                      <div class="row column_title">
                         <div class="col-md-12">
                            <div class="page_title">
-                              <h2 class="d-inline-block">Apply To Form-B & Details</h2>
-                              <a href="#" data-toggle="modal" data-target="#addNewChildModal" class="btn btn-primary btn-lg float-right">Add New Child</a>
-                              <a href="#" data-toggle="modal" data-target="#addParentDataModal" style="margin-right: 10px;" class="btn btn-success btn-lg float-right">Add For Parent</a>
+                              <h2 class="d-inline-block">Biometric Authentication & Details</h2>
+                              <a href="#" data-toggle="modal" data-target="#addParentDataModal" style="margin-right: 10px;" class="btn btn-success btn-lg float-right">Add Parent Data</a>
+                              <a href="#" data-toggle="modal" data-target="#addNewFingerModal" style="margin-right: 10px;" class="btn btn-info btn-lg float-right">Add/Update Finger Register</a>
                            </div>
                         </div>
                      </div>
+
+                     <!-- Add a modal for Add New addNewFingerModal -->
+                     <div class="modal fade" id="addNewFingerModal" tabindex="-1" role="dialog" aria-labelledby="addNewFingerModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addNewFingerModalLabel">Registration of Parent Finger</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Form to Add Employee -->
+                                    <form action="/registered_parent_finger" method="post" enctype="multipart/form-data">
+                                       <div class="row mt-3">
+                                         <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Select Parent *</b></label>
+                                             <select name="select_parent" class="form-control" required>
+                                               <option value="Father" selected>Father</option>
+                                               <option value="Mother">Mother</option>
+                                            </select>
+                                         </div>
+                                      </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <label for="exampleInputRD" style="color: black;"><b>Upload Finger *</b></label>
+                                                <input type="file" class="form-control-file" name="finger_print" accept=".BMP" required/>
+                                             </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12 col-sm-12"> 
+                                                <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Finger Registered</b></button> 
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                     <!-- End Add a modal for Add addNewFingerModal -->
 
                      <!-- Add a modal for Add New addParentDataModal -->
                      <div class="modal fade" id="addParentDataModal" tabindex="-1" role="dialog" aria-labelledby="addParentDataModalLabel" aria-hidden="true">
@@ -67,51 +107,6 @@
                      </div>
                      <!-- End Add a modal for Add addParentDataModal -->
 
-                     <!-- Add a modal for Add New addNewChildModal -->
-                     <div class="modal fade" id="addNewChildModal" tabindex="-1" role="dialog" aria-labelledby="addNewChildModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-md" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addNewChildModalLabel">Add New Child</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Form to Add Employee -->
-                                    <form action="/add_new_child" method="post">
-                                        <div class="row mt-3">
-                                            <div class="col-md-12">
-                                                <label for="exampleInputRD" style="color: black;"><b>Child Name *</b></label>
-                                                <input type="text" class="form-control" name="child_name" placeholder="Child Name" required/>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12">
-                                                <label for="exampleInputRD" style="color: black;"><b>Date of Birth *</b></label>
-                                                <input type="date" class="form-control" name="child_date_birth" required/>
-                                             </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                          <div class="col-md-12">
-                                              <label for="exampleInputRD" style="color: black;"><b>Gender *</b></label>
-                                              <select name="child_gender" class="form-control" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                             </select>
-                                          </div>
-                                       </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12 col-sm-12"> 
-                                                <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Add Child</b></button> 
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                     </div>
-                     <!-- End Add a modal for Add addNewChildModal -->
 
 
                      <!-- start row -->
@@ -171,113 +166,6 @@
                                  <div class="table-responsive-sm">
                                     <h3>Father Name: <span style="background-color: chartreuse;">{{parent_data_retrieve.father_name}}</span> ------->> Father CNIC: <span style="background-color: chartreuse;">{{parent_data_retrieve.father_cnic}}</span></h3>
                                     <h3>Mother Name: <span style="background-color: chartreuse;">{{parent_data_retrieve.mother_name}}</span> ------->> Mother CNIC: <span style="background-color: chartreuse;">{{parent_data_retrieve.mother_cnic}}</span></h3>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <!-- end table section Hover Table -->
-                     </div>
-                     <!-- end row -->
-
-
-
-
-
-
-
-                     <!-- start row -->
-                     <div class="row">
-                        <!-- start table section Hover Table -->
-                        <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Form-B Details</h2>
-                                 </div>
-                              </div>
-                              <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <table class="table table-hover">
-                                       <thead class="thead-light">
-                                          <tr>
-                                             <th>Id#</th>
-                                             <th>F.Name</th>
-                                             <th>F.CNIC</th>
-                                             <th>M.Name</th>
-                                             <th>M.CNIC</th>
-                                             <th>Child Name</th>
-                                             <th>Child Gender</th>
-                                             <th>Child DOB</th>
-                                             <th>Update</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody>
-                                       {% for formb in apply_to_formb_data_retrieve %}
-                                          <tr>
-                                             <td>{{formb.chi_id}}</td>
-                                             <td>{{formb.parent_data.father_name}}</td>
-                                             <td>{{formb.parent_data.father_cnic}}</td>
-                                             <td>{{formb.parent_data.mother_name}}</td>
-                                             <td>{{formb.parent_data.mother_cnic}}</td>
-                                             <td>{{formb.child_name}}</td>
-                                             <td>{{formb.child_gender}}</td>
-                                             <td>{{formb.child_birth_date}}</td>
-                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#updateChildDataModal{{ formb.chi_id }}" class="btn btn-primary btn-circle btn-block btn-md">
-                                                   <i class="fa fa-edit"> Update</i>
-                                                </a>
-                                             </td>
-                                          </tr>
-                                          <!-- Add a modal for Add New User -->
-                                          <div class="modal fade" id="updateChildDataModal{{ formb.chi_id }}" tabindex="-1" role="dialog" aria-labelledby="updateChildDataModalLabel" aria-hidden="true">
-                                             <div class="modal-dialog modal-md" role="document">
-                                                <div class="modal-content">
-                                                   <div class="modal-header">
-                                                         <h5 class="modal-title" id="updateChildDataModalLabel">Update Child Data</h5>
-                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                         </button>
-                                                   </div>
-                                                   <div class="modal-body">
-                                                         <!-- Form to Add Employee -->
-                                                         <form action="{{url_for('update_child_data', CompId=formb.chi_id)}}" method="post">
-                                                            <div class="row mt-3">
-                                                               <div class="col-md-12">
-                                                                   <label for="exampleInputRD" style="color: black;"><b>Child Name *</b></label>
-                                                                   <input type="text" class="form-control" name="child_name" value="{{formb.child_name}}" placeholder="Child Name" required/>
-                                                               </div>
-                                                           </div>
-                                                           <div class="row mt-3">
-                                                               <div class="col-md-12">
-                                                                   <label for="exampleInputRD" style="color: black;"><b>Date of Birth *</b></label>
-                                                                   <input type="date" class="form-control" value="{{formb.child_birth_date}}" name="child_date_birth" required/>
-                                                                </div>
-                                                           </div>
-                                                           <div class="row mt-3">
-                                                             <div class="col-md-12">
-                                                                 <label for="exampleInputRD" style="color: black;"><b>Gender *</b></label>
-                                                                 <select name="child_gender" class="form-control" required>
-                                                                  <option value="{{formb.child_gender}}" style="background-color: rgb(0, 255, 17);" selected>{{formb.child_gender}}</option>
-                                                                   <option value="Male">Male</option>
-                                                                   <option value="Female">Female</option>
-                                                                </select>
-                                                             </div>
-                                                           </div>
-                                                           <div class="row mt-3">
-                                                               <div class="col-md-12 col-sm-12"> 
-                                                                   <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Update Child Data</b></button> 
-                                                               </div>
-                                                           </div>
-                                                         </form>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <!-- End Add a modal for Add New User -->
-
-                                       {% endfor %}
-                                       </tbody>
-                                    </table>
                                  </div>
                               </div>
                            </div>

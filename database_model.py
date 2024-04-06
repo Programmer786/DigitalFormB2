@@ -6,7 +6,7 @@ import os
 from flask_migrate import Migrate
 
 # Session configuration
-app.permanent_session_lifetime = timedelta(hours=1)
+app.permanent_session_lifetime = timedelta(hours=5)
 
 # Database configuration for the online MySQL database on cPanel
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://cmsfarca_app:Pakistan007!!!@cp6.mywebsitebox.com/digital_form_b'
@@ -16,11 +16,26 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 # Set the upload folder
 UPLOAD_FOLDER = 'static/files'
+
 # Ensure the upload folder exists
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+# Set the upload folder for Registered Finger Print
+UPLOAD_REG_FINGER = 'static/reg_finger'
+# Ensure the upload folder exists
+if not os.path.exists(UPLOAD_REG_FINGER):
+    os.makedirs(UPLOAD_REG_FINGER)
+
+# Set the upload folder for Registered Finger Print
+UPLOAD_SAMPLE_FINGER = 'static/sample_finger'
+# Ensure the upload folder exists
+if not os.path.exists(UPLOAD_SAMPLE_FINGER):
+    os.makedirs(UPLOAD_SAMPLE_FINGER)
+
 # Configure the Flask app with the upload folder
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_REG_FINGER'] = UPLOAD_REG_FINGER
+app.config['UPLOAD_SAMPLE_FINGER'] = UPLOAD_SAMPLE_FINGER
 db = SQLAlchemy(app)
 # Model Migrate into database tables Automatically
 # First initialize only one time command (flask db init)
@@ -96,8 +111,10 @@ class ParentData(db.Model):  # This table use for a Apply Form
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     father_name = db.Column(db.String(30), nullable=True)
     father_cnic = db.Column(db.String(50), unique=True, nullable=True)
+    father_finger = db.Column(db.String(255), nullable=True)
     mother_name = db.Column(db.String(30), nullable=True)
     mother_cnic = db.Column(db.String(50), unique=True, nullable=True)
+    mother_finger = db.Column(db.String(255), nullable=True)
     send_comment = db.Column(db.String(255), nullable=True)
     received_comment = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(50), nullable=False)  # e.g., 'Pending', 'Processing', 'Complete', 'Rejected'

@@ -297,20 +297,21 @@ def add_one_time_parent_data():
                             db.session.add(new_entry_parent_data)
                             db.session.commit()
                             flash("Successfully Parent Data Save.", "success")
-                            return redirect('/apply_to_formb')
+                            return redirect('/biometric_authentication')
                         else:
                             flash("Error! Parent data already exists for this user.", "danger")
-                            return redirect('/apply_to_formb')
+                            return redirect('/biometric_authentication')
                     else:
                         flash("Error! Please fill out all required fields.", "danger")
-                        return redirect('/apply_to_formb')
+                        return redirect('/biometric_authentication')
                 except Exception as e:
                     # If an error occurs during database connection, display error message
                     db.session.rollback()
                     flash("Error. Duplicate CNIC Not Acceptable", "danger")
-                    return redirect('/apply_to_formb')
+                    return redirect('/biometric_authentication')
             else:
-                return render_template('Administrator/apply_to_formb.html')
+                # return render_template('Administrator/biometric_authentication.html')
+                return redirect('/biometric_authentication')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
@@ -414,6 +415,7 @@ def request_for_formb(UserId):
             return redirect('/parent_dashboard')
     else:
         return render_template('Parent/parent_login.html')
+
 
 @app.route("/logout_parent")
 def logout_parent():
