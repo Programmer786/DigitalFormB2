@@ -321,50 +321,50 @@ def add_one_time_parent_data():
         return render_template('Parent/parent_login.html')
 
 
-@app.route('/add_new_child', methods=['POST', 'GET'])
-def add_new_child():
-    if 'p_cnic' and 'p_rol_name' in session:
-        try:
-            if request.method == 'POST':
-                try:
-                    child_name = request.form['child_name']
-                    child_date_birth = request.form['child_date_birth']
-                    child_gender = request.form['child_gender']
-
-                    # Validate if the required fields are not empty
-                    if child_name and child_date_birth and child_gender:
-                        # Retrieve the user ID from the session
-                        session_user_id = session.get('p_UserId')
-
-                        existing_parent_data = ParentData.query.filter_by(user_id=session_user_id).first()
-                        new_entry_child_data = ChildData(
-                            child_name=child_name,
-                            child_birth_date=child_date_birth,
-                            child_gender=child_gender,
-                            user_id=session_user_id,
-                            par_id=existing_parent_data.par_id
-                        )
-                        db.session.add(new_entry_child_data)
-                        db.session.commit()
-                        flash("Successfully Child Data Save.", "success")
-                        return redirect('/apply_to_formb')
-                    else:
-                        flash("Error! Please fill out all required fields.", "danger")
-                        return redirect('/apply_to_formb')
-                except Exception as e:
-                    # If an error occurs during database connection, display error message
-                    db.session.rollback()
-                    flash("Error. Duplicate CNIC Not Acceptable", "danger")
-                    return redirect('/apply_to_formb')
-            else:
-                return render_template('Administrator/apply_to_formb.html')
-        except Exception as e:
-            # If an error occurs during database connection, display error message
-            db.session.rollback()
-            flash(f"Failed to connect to the database. -> Error: {str(e)}", "danger")
-            return redirect('/apply_to_formb')
-    else:
-        return render_template('Parent/parent_login.html')
+# @app.route('/add_new_child', methods=['POST', 'GET'])
+# def add_new_child():
+#     if 'p_cnic' and 'p_rol_name' in session:
+#         try:
+#             if request.method == 'POST':
+#                 try:
+#                     child_name = request.form['child_name']
+#                     child_date_birth = request.form['child_date_birth']
+#                     child_gender = request.form['child_gender']
+#
+#                     # Validate if the required fields are not empty
+#                     if child_name and child_date_birth and child_gender:
+#                         # Retrieve the user ID from the session
+#                         session_user_id = session.get('p_UserId')
+#
+#                         existing_parent_data = ParentData.query.filter_by(user_id=session_user_id).first()
+#                         new_entry_child_data = ChildData(
+#                             child_name=child_name,
+#                             child_birth_date=child_date_birth,
+#                             child_gender=child_gender,
+#                             user_id=session_user_id,
+#                             par_id=existing_parent_data.par_id
+#                         )
+#                         db.session.add(new_entry_child_data)
+#                         db.session.commit()
+#                         flash("Successfully Child Data Save.", "success")
+#                         return redirect('/apply_to_formb')
+#                     else:
+#                         flash("Error! Please fill out all required fields.", "danger")
+#                         return redirect('/apply_to_formb')
+#                 except Exception as e:
+#                     # If an error occurs during database connection, display error message
+#                     db.session.rollback()
+#                     flash("Error. Duplicate CNIC Not Acceptable", "danger")
+#                     return redirect('/apply_to_formb')
+#             else:
+#                 return render_template('Administrator/apply_to_formb.html')
+#         except Exception as e:
+#             # If an error occurs during database connection, display error message
+#             db.session.rollback()
+#             flash(f"Failed to connect to the database. -> Error: {str(e)}", "danger")
+#             return redirect('/apply_to_formb')
+#     else:
+#         return render_template('Parent/parent_login.html')
 
 
 @app.route('/update_child_data/<int:CompId>', methods=['POST', 'GET'])
