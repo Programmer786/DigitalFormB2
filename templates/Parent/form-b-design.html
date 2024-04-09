@@ -12,9 +12,9 @@
         }
 
         h1,
-        h2 {
+        /* h2 {
             text-align: center;
-        }
+        } */
         h3 {
             text-align: center;
         }
@@ -44,12 +44,17 @@
             border: 0px solid black;
         }
 
+        table.fixed {table-layout:fixed; }/*Setting the table width is important!*/
+        table.fixed td {overflow:hidden;}/*Hide text outside the cell.*/
+        table.fixed td:nth-of-type(1) {width:20px;}/*Setting the width of column 1.*/
+        table.fixed td:nth-of-type(2) {width:30px;}/*Setting the width of column 2.*/
+        table.fixed td:nth-of-type(3) {width:40px;}/*Setting the width of column 3.*/
+
     </style>
 </head>
 
 <body>
-
-    <h2>Government of Pakistan</h2>
+    <p>CRC No: 5698745 <span style="margin-left: 17%; font-size: 24px; font-weight: bold;">Government of Pakistan</span><span style="margin-left: 10%;"><img src="barcode.gif" alt="nadra stiker" width="120" height="40"></span></p>
     <h3>National Database and Registration Authority (Ministry of Home Affairs)</h3>
     <h3>Certificate of children under 18 years of age</h3>
 
@@ -60,15 +65,15 @@
         </tr>
     </table>
 
-    <table>
+    <table class="fixed">
         <tr>
-            <th>No.</th>
+            <th width="20px">No.</th>
             <th>Child's name and registration number</th>
             <th>Father's name and ID number</th>
             <th>Mother's name and ID number</th>
-            <th>Gender / Relationship</th>
-            <th>District of birth Date of Birth</th>
-            <th>Disability</th>
+            <th width="60px">Gender Relation</th>
+            <th width="90px">District of birth Date of Birth</th>
+            <th width="70px">Disability</th>
         </tr>
         <tr>
             <td>1</td>
@@ -98,8 +103,16 @@
         <p><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span></p>
     </p>
     <p style="margin-top: 2%;">
-        <p>Address: Village Waligai Post Office Waligai Tehsil Domil District Bannu</span></p>
+        <p style="text-align: center;">Address: Village Waligai Post Office Waligai Tehsil Domil District Bannu</span></p>
     </p>
+    <p style="margin-top: 2%;">
+        <p style="text-align: center;"><img src="empty_barcode.gif" alt="nadra stiker" width="250" height="70"></p>
+        <p style="text-align: center; margin-top: -1%;">1110183066325</span></p>
+    </p>
+    <p style="margin-top: 1%;">
+        <p>This certificate is admissible as legal evidence under the Act (6) 9 of the NADRA RD Nance Act, 2000 to prove the identity of the above child or children and the above particulars and information.</span></p>
+    </p>
+
 
 </body>
 
