@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FARCA Brands Salary Slip - March 2023</title>
+    <title>CRC Form-B</title>
     <style>
         body {
             font-family: Tahoma, sans-serif;
@@ -54,14 +54,18 @@
 </head>
 
 <body>
-    <p>CRC No: 5698745 <span style="margin-left: 17%; font-size: 24px; font-weight: bold;">Government of Pakistan</span><span style="margin-left: 10%;"><img src="barcode.gif" alt="nadra stiker" width="120" height="40"></span></p>
+    <p>CRC No: {{retrieve_parent_data.crc_no}} <span style="margin-left: 17%; font-size: 24px; font-weight: bold;">Government of Pakistan</span>
+        <span style="margin-left: 10%;">
+            <img src="{{ url_for('static', filename='images/barcode.gif') }}" alt="nadra stiker" width="120" height="40">
+        </span>
+    </p>
     <h3>National Database and Registration Authority (Ministry of Home Affairs)</h3>
     <h3>Certificate of children under 18 years of age</h3>
 
     <table class="table3">
         <tr>
-            <td style="width: 45%;">Applicant's Name: <u>Muhammad Taib</u></td>
-            <td style="width: 55%;">Applicant's Identity Card Number: <u>11101-8306632-5</u></td>
+            <td style="width: 45%;">Applicant's Name: <u>{{retrieve_parent_data.father_name}}</u></td>
+            <td style="width: 55%;">Applicant's Identity Card Number: <u>{{retrieve_parent_data.father_cnic}}</u></td>
         </tr>
     </table>
 
@@ -75,20 +79,28 @@
             <th width="90px">District of birth Date of Birth</th>
             <th width="70px">Disability</th>
         </tr>
+        {% for child_form in child_form_b_retrieve %}
         <tr>
-            <td>1</td>
-            <td>Rauf Khalid <br /> <p style="text-align: right;">11101-8306632-5</p></td>
-            <td>Muhammad Taib <br /> <p style="text-align: right;">11101-1010101-1</p></td>
-            <td>Gul Bano <br /> <p style="text-align: right;">11101-0101010-2</p></td>
-            <td>Boy <br /> <p style="text-align: right;">Son</p></td>
-            <td>Rawlakot Bazar <br /> <p style="text-align: right;">2002-03-15</p></td>
-            <td>No one</td>
+            <td>{{loop.index}}</td>
+            <td>{{child_form.child_name}} <br /> <p style="text-align: right;">{{child_form.new_cnic}}</p></td>
+            <td>{{child_form.parent_data.father_name}} <br /> <p style="text-align: right;">{{child_form.parent_data.father_cnic}}</p></td>
+            <td>{{child_form.parent_data.mother_name}} <br /> <p style="text-align: right;">{{child_form.parent_data.mother_cnic}}</p></td>
+            <td>
+                {% if child_form.child_gender == 'Male' %}
+                    Boy <br /> <p style="text-align: right;">Son</p>
+                {% else %}
+                    Girl <br /> <p style="text-align: right;">Daughter</p>    
+                {% endif %}
+            </td>
+            <td>{{child_form.parent_data.district.district_name}} <br /> <p style="text-align: right;">{{child_form.child_birth_date}}</p></td>
+            <td>{{child_form.disability}}</td>
         </tr>
+        {% endfor %}
     </table>
 
     <p style="margin-top: 2%;">
         <ol type="1">
-            <li>There are 5 children under the age of 18 of this family registered in our records.</li>
+            <li>There are all children under the age of 18 of this family registered in our records.</li>
             <li>Submit an application for obtaining an identity card as soon as the registered child reaches the age of eighteen years.</li>
             <li>This certificate should be retained because the children will be issued ID cards with the same numbers when they reach the age of eighteen years.</li>
             <li>Register the newborn child immediately and get a new registration certificate.</li>
@@ -97,17 +109,17 @@
     </p>
     <p style="margin-top: 10%;">
         <p><span style="margin-left: 60%; font-weight: bold;">Signature: Registrar General</span></p>
-        <p><span style="margin-left: 60%; font-weight: bold;">Issue date : 2024-04-08</span></p>
+        <p><span style="margin-left: 60%; font-weight: bold;">Issue date : {{ formatted_date_time }}</span></p>
     </p>
     <p style="margin-top: 10%;">
-        <p><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="nadra.jpg" alt="nadra stiker" width="70" height="10"></span></p>
+        <p><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span><span style="margin-left: 5%;"><img src="{{ url_for('static', filename='images/nadra.jpg') }}" alt="nadra stiker" width="70" height="10"></span></p>
     </p>
     <p style="margin-top: 2%;">
-        <p style="text-align: center;">Address: Village Waligai Post Office Waligai Tehsil Domil District Bannu</span></p>
+        <p style="text-align: center;">Address: {{retrieve_parent_data.address}}</span></p>
     </p>
     <p style="margin-top: 2%;">
-        <p style="text-align: center;"><img src="empty_barcode.gif" alt="nadra stiker" width="250" height="70"></p>
-        <p style="text-align: center; margin-top: -1%;">1110183066325</span></p>
+        <p style="text-align: center;"><img src="{{ url_for('static', filename='images/empty_barcode.gif') }}" alt="nadra stiker" width="250" height="70"></p>
+        <p style="text-align: center; margin-top: -1%;">{{retrieve_parent_data.father_cnic}}</span></p>
     </p>
     <p style="margin-top: 1%;">
         <p>This certificate is admissible as legal evidence under the Act (6) 9 of the NADRA RD Nance Act, 2000 to prove the identity of the above child or children and the above particulars and information.</span></p>

@@ -93,6 +93,28 @@
                               </div>
                            </div>
                            <div class="row mt-3">
+                              <div class="col-md-6">
+                                 <label for="exampleInputRD" style="color: black;"><b>Province *</b></label>
+                                 <select class="form-control" name="employee_province_sno" id="province-dropdown" required>
+                                    {% for province in provinces %}
+                                       <option value="{{ province.province_sno }}">{{ province.province_name }}</option>
+                                    {% endfor %}
+                                 </select>
+                              </div>
+                              <div class="col-md-6">
+                                 <label for="exampleInputRD" style="color: black;"><b>District *</b></label>
+                                 <select class="form-control" name="employee_district_sno" id="district-dropdown" required>
+                                    <option value="None" disabled selected>None</option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="row mt-3">
+                              <div class="col-md-12">
+                                 <label for="exampleInputRD" style="color: black;"><b>Address *</b></label>
+                                 <textarea class="form-control" name="address" rows="5" placeholder="Please Write Complete Address" required></textarea>
+                              </div>
+                          </div>
+                           <div class="row mt-3">
                               <div class="col-md-12">
                                  <label for="exampleInputRD" style="color: black;"><b>Password *</b></label>
                                  <input type="password" class="form-control" name="password" placeholder="************" required />
@@ -122,9 +144,11 @@
          </div>
       </div>
       <!-- jQuery -->
+      
       <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/dropdown_province.js') }}"></script>
       <!-- wow animation -->
       <script src="{{ url_for('static', filename='js/animate.js') }}"></script>
       <!-- select country -->
@@ -139,8 +163,9 @@
       <!-- custom js -->
       <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
       <!-- custom Cropping js -->
-      <script src="{{ url_for('static', filename='crop/Custom_Cropper.js') }}"></script>
-      <script src="{{ url_for('static', filename='crop/cropper.min.js') }}"></script>
+      <!-- <script src="{{ url_for('static', filename='crop/Custom_Cropper.js') }}"></script> -->
+      <!-- <script src="{{ url_for('static', filename='crop/cropper.min.js') }}"></script> -->
+      
       <script>
          var ps = new PerfectScrollbar('#sidebar');
       </script>

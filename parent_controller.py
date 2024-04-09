@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import asc, desc
 from database_model import *
 # from database_model import db, Users,Rol
-from flask import render_template, flash, session, request, redirect
+from flask import render_template, flash, session, request, redirect, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
@@ -72,6 +72,7 @@ def parent_login():
 
 @app.route('/parent_register', methods=['POST', 'GET'])
 def parent_register():
+    provinces = Province.query.order_by(asc(Province.province_name)).all()
     if request.method == 'POST':
         try:
             r_name = request.form.get('name')
@@ -79,6 +80,9 @@ def parent_register():
             r_phone = request.form.get('phone')
             r_cnic = request.form.get('cnic')
             r_gender = request.form.get('gender')
+            get_employee_province_sno = request.form.get('employee_province_sno')
+            get_employee_district_sno = request.form.get('employee_district_sno')
+            r_address = request.form.get('address')
             r_password = request.form.get('password')
             r_conform_password = request.form.get('conform_password')
             if (r_name != "") and (r_phone != "") and (r_cnic != "") and (r_password != "") and (
@@ -95,6 +99,9 @@ def parent_register():
                             cnic=r_cnic,
                             gender=r_gender,
                             rol_name='Parent',
+                            employee_province_sno=get_employee_province_sno,
+                            employee_district_sno=get_employee_district_sno,
+                            address=r_address,
                             password=change_to_hashed_password,
                             created_at=datetime.now(),
                             isActive=1
@@ -117,7 +124,17 @@ def parent_register():
             db.session.rollback()
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
             return redirect('/parent_register')
-    return render_template('Parent/parent_register.html')
+    return render_template('Parent/parent_register.html',provinces=provinces)
+
+
+@app.route('/get-districts')
+def get_districts():
+    province_sno = request.args.get('province_name', type=str)
+    districts = District.query.filter_by(district_province_sno=province_sno).all()
+    district_list = []
+    for district in districts:
+        district_list.append({'id': district.district_sno, 'name': district.district_name})
+    return jsonify(district_list)
 
 
 @app.route('/parent_profile', methods=['POST', 'GET'])

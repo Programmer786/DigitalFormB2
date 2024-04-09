@@ -346,6 +346,68 @@ def view_forward_formb():
         return render_template('Administrator/login.html')
 
 
+@app.route('/all_form_b_record', methods=['POST', 'GET'])
+def all_form_b_record():
+    if 'cnic' and 'rol_name' in session:
+        try:
+            # Retrieve the parent data where view_request is False
+            forward_to_admin_0 = ParentData.query.all()
+
+            # Initialize an empty list to store par_id values
+            par_ids = []
+
+            # Extract par_id values from the view_request_0 list
+            for parent_data in forward_to_admin_0:
+                par_ids.append(parent_data.par_id)
+
+            print("Par_ids: ",par_ids)
+            # Query ChildData where par_id is in the list of extracted par_ids
+            childs_formb_data_retrieve = (
+                ChildData.query
+                .join(ChildData.parent_data)
+                .filter(ChildData.par_id.in_(par_ids))
+                .all()
+            )
+            return render_template('Administrator/all_form_b_record.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
+                                   forward_to_admin_0=forward_to_admin_0)
+        except Exception as e:
+            # If an error occurs during database connection, display error message
+            db.session.rollback()
+            flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return redirect('/')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/form_b_print/<int:ParId>')
+def form_b_print(ParId):
+    if 'cnic' and 'rol_name' in session:
+        try:
+            retrieve_parent_data = ParentData.query.filter_by(par_id=ParId).first_or_404()
+            # Retrieve employee and their salary transactions
+            child_form_b_retrieve = (
+                ChildData.query
+                .filter_by(par_id=ParId)
+                .join(ParentData)
+                .options(joinedload(ChildData.parent_data))
+                .all()
+            )
+
+            # Now, formatted_date contains the month and year, e.g., "2024-04-09"
+            current_datetime = datetime.now()
+            formatted_date_time = current_datetime.strftime('%Y-%m-%d')
+            return render_template('Administrator/form_b_design.html', child_form_b_retrieve=child_form_b_retrieve,
+                                   formatted_date_time=formatted_date_time,
+                                   retrieve_parent_data=retrieve_parent_data)
+        except Exception as e:
+            # If an error occurs during database connection, display error message
+            db.session.rollback()
+            flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return render_template('Administrator/login.html')
+    else:
+        return render_template('Administrator/login.html')
+
+
 @app.route('/admin_finalized_formb/<int:ParId>')
 def admin_finalized_formb(ParId):
     if 'cnic' and 'rol_name' in session:

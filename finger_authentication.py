@@ -9,6 +9,7 @@ from database_model import *
 from flask import render_template, flash, session, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
+import random
 
 
 @app.route('/biometric_authentication', methods=['POST', 'GET'])
@@ -36,6 +37,9 @@ def registered_parent_finger():
                 try:
                     select_parent = request.form['select_parent']
                     uploaded_file_finger_print = request.files['finger_print']
+                    # Generate a random 7-digit number
+                    crc_random_number = random.randint(1000000, 9999999)
+
 
                     # Validate if the required fields are not empty
                     if select_parent and uploaded_file_finger_print:
@@ -80,6 +84,7 @@ def registered_parent_finger():
                             uploaded_file_finger_print.save(file_path_system)
                             existing_parent_data.mother_finger = file_full_name
 
+                        existing_parent_data.crc_no = crc_random_number
                         db.session.commit()
                         flash("Successfully Finger Data Save.", "success")
                         return redirect('/biometric_authentication')

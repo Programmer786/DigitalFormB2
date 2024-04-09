@@ -109,6 +109,7 @@ class ParentData(db.Model):  # This table use for a Apply Form
     __tablename__ = 'parent_data'
     par_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    crc_no = db.Column(db.Integer, unique=True, nullable=True)
     father_name = db.Column(db.String(30), nullable=True)
     father_cnic = db.Column(db.String(50), unique=True, nullable=True)
     father_finger = db.Column(db.String(255), nullable=True)
@@ -117,12 +118,17 @@ class ParentData(db.Model):  # This table use for a Apply Form
     mother_finger = db.Column(db.String(255), nullable=True)
     send_comment = db.Column(db.String(255), nullable=True)
     received_comment = db.Column(db.String(255), nullable=True)
+    employee_province_sno = db.Column(db.Integer, db.ForeignKey('province.province_sno'), nullable=True)
+    employee_district_sno = db.Column(db.Integer, db.ForeignKey('district.district_sno'), nullable=True)
+    address = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(50), nullable=False)  # e.g., 'Pending', 'Processing', 'Complete', 'Rejected'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     forward_to_admin = db.Column(db.Boolean, default=False, nullable=False)
     # Define relationships if needed
     users = db.relationship('Users', backref=db.backref('parent_data', lazy=True))
+    province = db.relationship('Province', backref=db.backref('employees', lazy=True))
+    district = db.relationship('District', backref=db.backref('employees', lazy=True))
     # child_data = db.relationship('ChildData', backref='parent')
 
 
@@ -134,8 +140,27 @@ class ChildData(db.Model):
     child_name = db.Column(db.String(30), nullable=True)
     child_birth_date = db.Column(db.Date, nullable=False)
     child_gender = db.Column(db.String(20), nullable=True)
+    new_cnic = db.Column(db.String(50), unique=True, nullable=True)
+    disability = db.Column(db.String(30), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     # Define relationships if needed
     users = db.relationship('Users', backref=db.backref('child_data', lazy=True))
     parent_data = db.relationship('ParentData', backref=db.backref('child_data', lazy=True))
+
+
+# Create province model. The table name "province" will automatically be assigned to the model’s table.
+class Province(db.Model):
+    __tablename__ = 'province'
+    province_sno = db.Column(db.Integer, primary_key=True)
+    province_name = db.Column(db.String(50), unique=True, nullable=False)
+
+
+# Create District model. The table name "district" will automatically be assigned to the model’s table.
+class District(db.Model):
+    __tablename__ = 'district'
+    district_sno = db.Column(db.Integer, primary_key=True)
+    district_province_sno = db.Column(db.Integer, db.ForeignKey('province.province_sno'), nullable=False)
+    district_name = db.Column(db.String(100), unique=True, nullable=False)
+    # Define the relationships
+    province = db.relationship('Province', backref=db.backref('districts', lazy=True))
