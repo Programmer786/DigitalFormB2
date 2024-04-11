@@ -1,0 +1,67 @@
+{% extends "Administrator/layout.html" %}
+{% block body %} 
+                  <!-- Work/Task Area container-fluid inner -->
+                  <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                              <h2 class="d-inline-block">Form-B Print & Details</h2>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- start row -->
+                     <div class="row">
+                        <!-- start table section Hover Table -->
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>Form-B Details</h2>
+                                 </div>
+                              </div>
+                              <div class="table_section padding_infor_info">
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                       <thead class="thead-light">
+                                          <tr>
+                                             <th>CRC No#</th>
+                                             <th>F.Name</th>
+                                             <th>F.CNIC</th>
+                                             <th>M.Name</th>
+                                             <th>M.CNIC</th>
+                                             <th>Address</th>
+                                             <th>Form-B</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for formb in forward_to_admin_0 %}
+                                          <tr>
+                                             <td>{{formb.crc_no}}</td>
+                                             <td>{{formb.father_name}}</td>
+                                             <td>{{formb.father_cnic}}</td>
+                                             <td>{{formb.mother_name}}</td>
+                                             <td>{{formb.mother_cnic}}</td>
+                                             <td>{{formb.address}}</td>
+                                             <td>
+                                                <a href="{{url_for('form_b_print', ParId=formb.par_id)}}" class="btn btn-primary btn-circle btn-block btn-md">
+                                                   <i class="fa fa-print"> Print</i>
+                                                </a>
+                                             </td>
+                                          </tr>
+
+                                       {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end table section Hover Table -->
+                     </div>
+                     <!-- end row -->
+
+                     
+                  </div>
+                  
+{% endblock %}                 
