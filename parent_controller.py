@@ -82,7 +82,7 @@ def parent_register():
             r_gender = request.form.get('gender')
             get_employee_province_sno = request.form.get('employee_province_sno')
             get_employee_district_sno = request.form.get('employee_district_sno')
-            r_address = request.form.get('address')
+            # r_address = request.form.get('address')
             r_password = request.form.get('password')
             r_conform_password = request.form.get('conform_password')
             if (r_name != "") and (r_phone != "") and (r_cnic != "") and (r_password != "") and (
@@ -101,7 +101,7 @@ def parent_register():
                             rol_name='Parent',
                             employee_province_sno=get_employee_province_sno,
                             employee_district_sno=get_employee_district_sno,
-                            address=r_address,
+                            # address=r_address,
                             password=change_to_hashed_password,
                             created_at=datetime.now(),
                             isActive=1
@@ -124,7 +124,7 @@ def parent_register():
             db.session.rollback()
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
             return redirect('/parent_register')
-    return render_template('Parent/parent_register.html',provinces=provinces)
+    return render_template('Parent/parent_register.html', provinces=provinces)
 
 
 @app.route('/get-districts')
@@ -270,7 +270,8 @@ def apply_to_formb():
                 .options(joinedload(ChildData.parent_data))
                 .all()
             )
-            return render_template('Parent/apply_to_formb.html', parent_data_retrieve=parent_data_retrieve, apply_to_formb_data_retrieve=apply_to_formb_data_retrieve)
+            return render_template('Parent/apply_to_formb.html', parent_data_retrieve=parent_data_retrieve,
+                                   apply_to_formb_data_retrieve=apply_to_formb_data_retrieve)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import joinedload
 from app import app
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, and_
 from database_model import *
 # from database_model import db, Users,Rol
 from flask import render_template, flash, session, request, redirect
@@ -348,6 +348,16 @@ def view_forward_formb():
 
 @app.route('/all_form_b_record', methods=['POST', 'GET'])
 def all_form_b_record():
+    delivery_boy = (
+        Users.query
+        .join(ChildData.parent_data)  # Assuming there's a relationship between Users and ChildData
+        .filter(
+            and_(
+                Users.rol_name == 'DeliveryBoy',
+                Users.delivery_status == 'Available'
+            )
+        ).all()
+    )
     if 'cnic' and 'rol_name' in session:
         try:
             # Retrieve the parent data where view_request is False
@@ -369,12 +379,43 @@ def all_form_b_record():
                 .all()
             )
             return render_template('Administrator/all_form_b_record.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
-                                   forward_to_admin_0=forward_to_admin_0)
+                                   forward_to_admin_0=forward_to_admin_0,
+                                   delivery_boy=delivery_boy)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/form_b_handover_to_db/<int:ParId>', methods=['GET', 'POST'])
+def form_b_handover_to_db(ParId):
+    if 'cnic' in session and 'rol_name' in session:
+        if request.method == 'POST':
+            try:
+                sel_one_parent = ParentData.query.filter_by(par_id=ParId).first()
+                sel_one_parent.delivery_status = 'Not_Received'
+
+                get_delivery_boy_name = request.form.get('delivery_boy_name')
+                new_entry_delivery_boy = DeliveryBoyHandover(
+                    user_id=get_delivery_boy_name,
+                    par_id=ParId,
+                    drop_address=sel_one_parent.address,
+                    status='OnTheWay'
+                )
+                db.session.add(new_entry_delivery_boy)
+                db.session.commit()
+                flash("Form-B successfully handed over to delivery boy.", "success")
+                return redirect('/all_form_b_record')
+            except Exception as e:
+                # If an error occurs during database connection, display error message
+                db.session.rollback()
+                flash(f"Failed to connect to the database. -> Error: {str(e)}", "danger")
+                return redirect('/all_form_b_record')
+        else:
+            return redirect('/all_form_b_record')
     else:
         return render_template('Administrator/login.html')
 
@@ -404,6 +445,30 @@ def form_b_print(ParId):
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return render_template('Administrator/login.html')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/all_delivery_boy', methods=['POST', 'GET'])
+def all_delivery_boy():
+    if 'cnic' and 'rol_name' in session:
+        try:
+            # Retrieve the parent data where view_request is False
+            # all_delivery_boy_data_retrieve = Users.query.filter_by(rol_name='DeliveryBoy').all()
+            all_delivery_boy_data_retrieve = (
+                Users.query
+                .filter_by(rol_name='DeliveryBoy')
+                .join(District)
+                .options(joinedload(Users.district))
+                .all()
+            )
+
+            return render_template('Administrator/all_delivery_boy.html', all_delivery_boy_data_retrieve=all_delivery_boy_data_retrieve)
+        except Exception as e:
+            # If an error occurs during database connection, display error message
+            db.session.rollback()
+            flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return redirect('/')
     else:
         return render_template('Administrator/login.html')
 

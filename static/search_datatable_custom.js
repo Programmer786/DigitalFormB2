@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // this is for total table_EXPANSE
-    $('#table_EXPANSE').DataTable( {
+    $('#dataTable').DataTable( {
        responsive: true, 
        lengthChange: false, 
        autoWidth: false,

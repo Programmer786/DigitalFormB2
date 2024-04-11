@@ -12,7 +12,21 @@ from datetime import datetime, date
 @app.route("/delivery_boy_dashboard")
 def delivery_boy_dashboard():
     if 'p_cnic' and 'p_rol_name' in session:
-        return render_template('DeliveryBoy/index.html')
+        try:
+            session_UserId = session['p_UserId']
+            delivery_boy_drop_data_retrieve = (
+                DeliveryBoyHandover.query
+                .filter_by(user_id=session_UserId)
+                .join(DeliveryBoyHandover.users)
+                .join(DeliveryBoyHandover.parent_data)
+                .all()
+            )
+            return render_template('DeliveryBoy/view_location_to_drop.html', delivery_boy_drop_data_retrieve=delivery_boy_drop_data_retrieve)
+        except Exception as e:
+            # If an error occurs during database connection, display error message
+            db.session.rollback()
+            flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return redirect('/delivery_boy_dashboard')
     else:
         return render_template('Parent/parent_login.html')
 
@@ -138,6 +152,7 @@ def delivery_boy_for_update(UserId):
 
 @app.route('/delivery_boy_register', methods=['POST', 'GET'])
 def delivery_boy_register():
+    provinces = Province.query.order_by(asc(Province.province_name)).all()
     if request.method == 'POST':
         try:
             r_name = request.form.get('name')
@@ -145,6 +160,8 @@ def delivery_boy_register():
             r_phone = request.form.get('phone')
             r_cnic = request.form.get('cnic')
             r_gender = request.form.get('gender')
+            get_employee_province_sno = request.form.get('employee_province_sno')
+            get_employee_district_sno = request.form.get('employee_district_sno')
             r_password = request.form.get('password')
             r_conform_password = request.form.get('conform_password')
             if (r_name != "") and (r_phone != "") and (r_cnic != "") and (r_password != "") and (
@@ -160,6 +177,8 @@ def delivery_boy_register():
                             phone=r_phone,
                             cnic=r_cnic,
                             gender=r_gender,
+                            employee_province_sno=get_employee_province_sno,
+                            employee_district_sno=get_employee_district_sno,
                             rol_name='DeliveryBoy',
                             password=change_to_hashed_password,
                             created_at=datetime.now(),
@@ -183,44 +202,44 @@ def delivery_boy_register():
             db.session.rollback()
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
             return redirect('/delivery_boy_register')
-    return render_template('DeliveryBoy/delivery_boy_register.html')
+    return render_template('DeliveryBoy/delivery_boy_register.html', provinces=provinces)
 
 
-@app.route('/delivery_boy_view_location_to_drop', methods=['POST', 'GET'])
-def delivery_boy_view_location_to_drop():
+@app.route('/successful_deliver_by_db/<int:HoId>/<int:ParId>')
+def successful_deliver_by_db(HoId,ParId):
     if 'p_cnic' and 'p_rol_name' in session:
         try:
-            session_UserId = session['p_UserId']
-            complaint_data_retrieve = Complaints.query.filter_by(user_id=session_UserId).all()
-
-            if request.method == 'POST':
-                try:
-                    complaint_title = request.form['complaint_title']
-                    complaint_details = request.form['complaint_details']
-                    if (complaint_title != "") and (complaint_details != ""):
-                        new_parent_complaint = Complaints(
-                            user_id=session_UserId,
-                            title=complaint_title,
-                            send_details=complaint_details,
-                            status='pending'
-                        )
-                        db.session.add(new_parent_complaint)
-                        db.session.commit()
-                        flash("Successfully Submitted.", "success")
-                        return redirect('/parent_complaint')
-                    else:
-                        flash("Error! Please fill out this field.", "danger")
-                except Exception as e:
-                    # If an error occurs during database connection, display error message
-                    db.session.rollback()
-                    flash(f"Error: {str(e)}", "danger")
-                    return redirect('/parent_complaint')
-            else:
-                return render_template('Parent/parent_complaint.html', complaint_data_retrieve=complaint_data_retrieve)
+            sel_one_delivery = DeliveryBoyHandover.query.filter_by(ho_id=HoId).first()
+            sel_one_delivery.status = "Deliver"
+            sel_one_parent = ParentData.query.filter_by(par_id=ParId).first()
+            sel_one_parent.delivery_status = 'Received'
+            db.session.commit()
+            flash("Record Successfully Delivery", "success")
+            return redirect('/delivery_boy_dashboard')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return redirect('/parent_complaint')
+            return redirect('/delivery_boy_dashboard')
+    else:
+        return render_template('Parent/parent_login.html')
+
+
+@app.route('/return_delivery_by_db/<int:HoId>/<int:ParId>')
+def return_delivery_by_db(HoId,ParId):
+    if 'p_cnic' and 'p_rol_name' in session:
+        try:
+            sel_one_delivery = DeliveryBoyHandover.query.filter_by(ho_id=HoId).first()
+            sel_one_delivery.status = "Return"
+            sel_one_parent = ParentData.query.filter_by(par_id=ParId).first()
+            sel_one_parent.delivery_status = 'No'
+            db.session.commit()
+            flash("Record Successfully Return To Main Office", "success")
+            return redirect('/delivery_boy_dashboard')
+        except Exception as e:
+            # If an error occurs during database connection, display error message
+            db.session.rollback()
+            flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return redirect('/delivery_boy_dashboard')
     else:
         return render_template('Parent/parent_login.html')

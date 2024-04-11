@@ -50,12 +50,18 @@ class Users(db.Model):
     phone = db.Column(db.String(50), unique=True, nullable=True)
     cnic = db.Column(db.String(20), unique=True, nullable=True)
     gender = db.Column(db.String(20), unique=False, nullable=True)
-    rol_name = db.Column(db.String(20), unique=False, nullable=True)  # Can be 'admin', 'parent', 'manager', 'employee', 'delivery_boy'
+    rol_name = db.Column(db.String(20), unique=False, nullable=True)  # Can be 'admin', 'parent', 'manager', 'employee', 'DeliveryBoy'
+    employee_province_sno = db.Column(db.Integer, db.ForeignKey('province.province_sno'), nullable=True)
+    employee_district_sno = db.Column(db.Integer, db.ForeignKey('district.district_sno'), nullable=True)
+    delivery_status = db.Column(db.String(20), default='Available', nullable=True)  # e.g., 'Available', 'Pending', 'OutOfDelivery', 'NotAvailable'
     password = db.Column(db.String(256))
     photo = db.Column(db.String(256))  # e.g., db.Column(db.LargeBinary) for LONGBLOB).
     isActive = db.Column(db.Boolean, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Define relationships if needed
+    province = db.relationship('Province', backref=db.backref('users', lazy=True))
+    district = db.relationship('District', backref=db.backref('users', lazy=True))
 
 
 class Requests(db.Model):
@@ -118,17 +124,14 @@ class ParentData(db.Model):  # This table use for a Apply Form
     mother_finger = db.Column(db.String(255), nullable=True)
     send_comment = db.Column(db.String(255), nullable=True)
     received_comment = db.Column(db.String(255), nullable=True)
-    employee_province_sno = db.Column(db.Integer, db.ForeignKey('province.province_sno'), nullable=True)
-    employee_district_sno = db.Column(db.Integer, db.ForeignKey('district.district_sno'), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(50), nullable=False)  # e.g., 'Pending', 'Processing', 'Complete', 'Rejected'
+    delivery_status = db.Column(db.String(20), default='No', nullable=True)  # e.g., 'No', 'Not_Received', 'Received' No:- its means no any process for delivery
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     forward_to_admin = db.Column(db.Boolean, default=False, nullable=False)
     # Define relationships if needed
     users = db.relationship('Users', backref=db.backref('parent_data', lazy=True))
-    province = db.relationship('Province', backref=db.backref('employees', lazy=True))
-    district = db.relationship('District', backref=db.backref('employees', lazy=True))
     # child_data = db.relationship('ChildData', backref='parent')
 
 
@@ -164,3 +167,17 @@ class District(db.Model):
     district_name = db.Column(db.String(100), unique=True, nullable=False)
     # Define the relationships
     province = db.relationship('Province', backref=db.backref('districts', lazy=True))
+
+
+class DeliveryBoyHandover(db.Model):
+    __tablename__ = 'delivery_boy_handover'
+    ho_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    par_id = db.Column(db.Integer, db.ForeignKey('parent_data.par_id'), nullable=False)
+    drop_address = db.Column(db.String(50), nullable=True)
+    status = db.Column(db.String(50), default='OnTheWay', nullable=True)  # e.g., 'OnTheWay', 'Deliver', 'Return'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Define relationships if needed
+    users = db.relationship('Users', backref=db.backref('delivery_boy_handover', lazy=True))
+    parent_data = db.relationship('ParentData', backref=db.backref('delivery_boy_handover', lazy=True))

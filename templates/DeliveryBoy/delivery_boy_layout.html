@@ -112,8 +112,7 @@
                      <li class="active">
                         <a href="/"><i class="fas fa-tachometer-alt yellow_color"></i> <span> Dashboard</span></a>
                      </li>
-                     <li><a href="/delivery_boy_view_location_to_drop"><i class="fa fa-bank chartreuse_color"></i> <span>View Location</span></a></li>
-                     <!-- <li><a href="/apply_to_formb"><i class="fa fa-bank rauf_color2"></i> <span>Apply For Form-B</span></a></li> -->
+                     <!-- <li><a href="/view_location_to_drop"><i class="fa fa-bank chartreuse_color"></i> <span>View Drop Location</span></a></li> -->
 
                      <li><a href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-sign-out-alt red_color"></i> <span>Logout</span></a></li>
                   </ul>
@@ -310,35 +309,18 @@
       <script src="{{ url_for('static', filename='AdminLTE/dist/js/pages/dashboard.js') }}"></script>
       <!-- End AdminLTE JS Files -->
       <!-- Page specific script for Datatables Download Button Action Reports -->
-      <!-- <script>
+      <script>
          $(function () {
-            $("#table_EXPANSE").DataTable({
+            $("#dataTable").DataTable({
                "responsive": true, 
                "lengthChange": false, 
                "autoWidth": false,
                "buttons": ["copy", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#table_EXPANSE_wrapper .col-md-6:eq(0)');
-
-            $("#table_ASSETS").DataTable({
-               "responsive": true, 
-               "lengthChange": false, 
-               "autoWidth": false,
-               "buttons": ["copy", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#table_ASSETS_wrapper .col-md-6:eq(0)');
-
-            $('#example2').DataTable({
-               "paging": true,
-               "lengthChange": false,
-               "searching": false,
-               "ordering": true,
-               "info": true,
-               "autoWidth": false,
-               "responsive": true,
-            });
          });
-      </script> -->
+      </script>
       <!-- 2nd option for table -->
-      <script src="{{ url_for('static', filename='search_datatable_custom.js') }}"></script>
+      <!-- <script src="{{ url_for('static', filename='search_datatable_custom.js') }}"></script> -->
       <!--  Only ASCII character in that range allowed -->
       <script>
          function onlyNumberKey(evt) {

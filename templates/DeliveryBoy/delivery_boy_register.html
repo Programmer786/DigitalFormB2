@@ -93,6 +93,22 @@
                               </div>
                            </div>
                            <div class="row mt-3">
+                              <div class="col-md-6">
+                                 <label for="exampleInputRD" style="color: black;"><b>Province *</b></label>
+                                 <select class="form-control" name="employee_province_sno" id="province-dropdown" required>
+                                    {% for province in provinces %}
+                                       <option value="{{ province.province_sno }}">{{ province.province_name }}</option>
+                                    {% endfor %}
+                                 </select>
+                              </div>
+                              <div class="col-md-6">
+                                 <label for="exampleInputRD" style="color: black;"><b>District *</b></label>
+                                 <select class="form-control" name="employee_district_sno" id="district-dropdown" required>
+                                    <option value="None" disabled selected>None</option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="row mt-3">
                               <div class="col-md-12">
                                  <label for="exampleInputRD" style="color: black;"><b>Password *</b></label>
                                  <input type="password" class="form-control" name="password" placeholder="************" required />
@@ -125,6 +141,7 @@
       <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/dropdown_province.js') }}"></script>
       <!-- wow animation -->
       <script src="{{ url_for('static', filename='js/animate.js') }}"></script>
       <!-- select country -->
