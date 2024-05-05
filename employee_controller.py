@@ -9,12 +9,39 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 
+def notification_data_send_into_session():
+    notification_data_retrieve = Notification.query.all()
+    # Check the status of each notification and convert them to dictionaries
+    notification_dicts = []
+    if notification_data_retrieve:
+        for entry in notification_data_retrieve:
+            if entry.end_date >= date.today():
+                entry.status = "Live"
+            else:
+                entry.status = "Ended"
+            notification_dict = {
+                'n_id': entry.n_id,
+                'notification_info': entry.notification_info,
+                'end_date': entry.end_date.strftime('%d-%m-%Y'),  # Convert a datetime object to string '%Y-%m-%d'
+                'status': entry.status
+            }
+            notification_dicts.append(notification_dict)
+
+    # Store the list of dictionaries in the session
+    session['notification_data'] = notification_dicts
+
+
 @app.route("/employee_dashboard")
 def employee_dashboard():
     if 'cnic' and 'rol_name' in session:
+        # Remove the 'notification_data' item from the session for new data
+        session.pop('notification_data', None)
+        # notification data send to session
+        notification_data_send_into_session()
+
         return render_template('Employee/index.html')
     else:
-        return render_template('Employee/login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/employee_role', methods=['POST', 'GET'])
@@ -78,9 +105,9 @@ def employee_role():
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return render_template('Employee/login.html')
+            return render_template('Administrator/login.html')
     else:
-        return render_template('Employee/login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/employee_profile', methods=['POST', 'GET'])

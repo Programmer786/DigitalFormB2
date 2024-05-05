@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import asc, desc, and_
 from database_model import *
 # from database_model import db, Users,Rol
-from flask import render_template, flash, session, request, redirect
+from flask import render_template, flash, session, request, redirect, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
@@ -12,6 +12,11 @@ from datetime import datetime, date
 @app.route("/")
 def home():
     if 'cnic' and 'rol_name' in session:
+        # Remove the 'notification_data' item from the session for new data
+        session.pop('notification_data', None)
+        # notification data send to session
+        notification_data_send_into_session()
+
         # Get today's date
         today = date.today()
         # Fetch real data from the database complaint.status == 'Pending'
@@ -529,6 +534,146 @@ def rejected_submitted_form1(ParId):
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return render_template('Administrator/login.html')
+    else:
+        return render_template('Administrator/login.html')
+
+
+def notification_data_send_into_session():
+    notification_data_retrieve = Notification.query.all()
+    # Check the status of each notification and convert them to dictionaries
+    notification_dicts = []
+    if notification_data_retrieve:
+        for entry in notification_data_retrieve:
+            if entry.end_date >= date.today():
+                entry.status = "Live"
+            else:
+                entry.status = "Ended"
+            notification_dict = {
+                'n_id': entry.n_id,
+                'notification_info': entry.notification_info,
+                'end_date': entry.end_date.strftime('%d-%m-%Y'),  # Convert a datetime object to string '%Y-%m-%d'
+                'status': entry.status
+            }
+            notification_dicts.append(notification_dict)
+
+    # Store the list of dictionaries in the session
+    session['notification_data'] = notification_dicts
+
+
+@app.route('/notification', methods=['POST', 'GET'])
+def notification():
+    if 'cnic' and 'rol_name' in session:
+        try:
+            session_user_id = session['UserId']
+            notification_data_retrieve = Notification.query.all()
+
+            # Check the status of each notification
+            if notification_data_retrieve:
+                for entry in notification_data_retrieve:
+                    if entry.end_date >= date.today():
+                        entry.status = "Live"
+                    else:
+                        entry.status = "Ended"
+                db.session.commit()
+
+            # Remove the 'notification_data' item from the session for new data
+            session.pop('notification_data', None)
+            # notification data send to session
+            notification_data_send_into_session()
+
+            # after Retrieve the list of notifications from the session
+            notification_data_retrieve = session.get('notification_data', [])
+            # For example, you can iterate over it and access each notification dictionary
+            for notification_dict in notification_data_retrieve:
+                print(notification_dict)
+
+            if request.method == 'POST':
+                message = request.form['message']
+                end_date = request.form['end_date']
+
+                if message and end_date:
+                    new_notification = Notification(
+                        user_id=session_user_id,
+                        notification_info=message,
+                        end_date=end_date
+                    )
+                    db.session.add(new_notification)
+                    db.session.commit()
+                    flash("Notification added successfully.", "success")
+                    return redirect('/notification')
+                else:
+                    flash("Error! Please fill out all fields.", "danger")
+            else:
+                return render_template('Administrator/notification.html', notification_data_retrieve=notification_data_retrieve)
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error: {str(e)}", "danger")
+            return redirect('/')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/update_notification/<int:Notification_Id>', methods=['POST'])
+def update_notification(Notification_Id):
+    if 'cnic' and 'rol_name' in session:
+        try:
+            if request.method == 'POST':
+                # Get the data from the form
+                message = request.form['message']
+                end_date = request.form['end_date']
+
+                # Retrieve the notification from the database
+                get_notification = Notification.query.get(Notification_Id)
+
+                # Update the notification attributes
+                get_notification.notification_info = message
+                get_notification.end_date = end_date
+
+                # Commit the changes to the database
+                db.session.commit()
+
+                # Remove the 'notification_data' item from the session for new data
+                session.pop('notification_data', None)
+                # notification data send to session
+                notification_data_send_into_session()
+
+                flash("Notification updated successfully.", "success")
+                return redirect('/notification')
+        except Exception as e:
+            flash(f"Error: {str(e)}", "danger")
+            db.session.rollback()
+            return redirect('/notification')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/delete_notification/<int:Notification_Id>', methods=['GET'])
+def delete_notification(Notification_Id):
+    if 'cnic' and 'rol_name' in session:
+        try:
+            # Retrieve the notification from the database
+            get_notification = Notification.query.get(Notification_Id)
+
+            # Check if the notification exists
+            if get_notification:
+                # Delete the notification
+                db.session.delete(get_notification)
+                db.session.commit()
+
+                # Remove the 'notification_data' item from the session for new data
+                session.pop('notification_data', None)
+                # notification data send to session
+                notification_data_send_into_session()
+
+                flash("Notification deleted successfully.", "success")
+            else:
+                flash("Notification not found.", "danger")
+
+            return redirect('/notification')
+        except Exception as e:
+            flash(f"Error: {str(e)}", "danger")
+            db.session.rollback()
+            return redirect('/notification')
     else:
         return render_template('Administrator/login.html')
 

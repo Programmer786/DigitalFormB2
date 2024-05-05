@@ -9,9 +9,36 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 
+def notification_data_send_into_session():
+    notification_data_retrieve = Notification.query.all()
+    # Check the status of each notification and convert them to dictionaries
+    notification_dicts = []
+    if notification_data_retrieve:
+        for entry in notification_data_retrieve:
+            if entry.end_date >= date.today():
+                entry.status = "Live"
+            else:
+                entry.status = "Ended"
+            notification_dict = {
+                'n_id': entry.n_id,
+                'notification_info': entry.notification_info,
+                'end_date': entry.end_date.strftime('%d-%m-%Y'),  # Convert a datetime object to string '%Y-%m-%d'
+                'status': entry.status
+            }
+            notification_dicts.append(notification_dict)
+
+    # Store the list of dictionaries in the session
+    session['notification_data'] = notification_dicts
+
+
 @app.route("/delivery_boy_dashboard")
 def delivery_boy_dashboard():
     if 'p_cnic' and 'p_rol_name' in session:
+        # Remove the 'notification_data' item from the session for new data
+        session.pop('notification_data', None)
+        # notification data send to session
+        notification_data_send_into_session()
+
         try:
             session_UserId = session['p_UserId']
             delivery_boy_drop_data_retrieve = (
@@ -28,7 +55,7 @@ def delivery_boy_dashboard():
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/delivery_boy_dashboard')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/delivery_boy_profile', methods=['POST', 'GET'])
@@ -44,9 +71,9 @@ def delivery_boy_profile():
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return render_template('Parent/parent_login.html')
+            return render_template('Administrator/login.html')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/disable_role_delivery_boy/<int:UserId>')
@@ -65,7 +92,7 @@ def disable_role_delivery_boy(UserId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/delivery_boy_profile')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/enable_role_delivery_boy/<int:UserId>')
@@ -84,7 +111,7 @@ def enable_role_delivery_boy(UserId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/delivery_boy_profile')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/change_password_delivery_boy/<int:UserId>', methods=['POST', 'GET'])
@@ -114,7 +141,7 @@ def change_password_delivery_boy(UserId):
             return redirect('/delivery_boy_profile')  # Add return statement here
     else:
         # Render the form for GET requests
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/delivery_boy_for_update/<int:UserId>', methods=['POST', 'GET'])
@@ -147,7 +174,7 @@ def delivery_boy_for_update(UserId):
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
             return redirect('/delivery_boy_profile')  # Add return statement here
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/delivery_boy_register', methods=['POST', 'GET'])
@@ -222,7 +249,7 @@ def successful_deliver_by_db(HoId,ParId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/delivery_boy_dashboard')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/return_delivery_by_db/<int:HoId>/<int:ParId>')
@@ -242,4 +269,4 @@ def return_delivery_by_db(HoId,ParId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/delivery_boy_dashboard')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')

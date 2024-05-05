@@ -9,12 +9,38 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 
+def notification_data_send_into_session():
+    notification_data_retrieve = Notification.query.all()
+    # Check the status of each notification and convert them to dictionaries
+    notification_dicts = []
+    if notification_data_retrieve:
+        for entry in notification_data_retrieve:
+            if entry.end_date >= date.today():
+                entry.status = "Live"
+            else:
+                entry.status = "Ended"
+            notification_dict = {
+                'n_id': entry.n_id,
+                'notification_info': entry.notification_info,
+                'end_date': entry.end_date.strftime('%d-%m-%Y'),  # Convert a datetime object to string '%Y-%m-%d'
+                'status': entry.status
+            }
+            notification_dicts.append(notification_dict)
+
+    # Store the list of dictionaries in the session
+    session['notification_data'] = notification_dicts
+
+
 @app.route("/parent_dashboard")
 def parent_dashboard():
     if 'p_cnic' and 'p_rol_name' in session:
+        # Remove the 'notification_data' item from the session for new data
+        session.pop('notification_data', None)
+        # notification data send to session
+        notification_data_send_into_session()
         return render_template('Parent/index.html')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/parent_login', methods=['POST', 'GET'])
@@ -55,19 +81,19 @@ def parent_login():
 
                         else:
                             flash("Error! Invalid Password, Please try Again!", "danger")
-                            return render_template('Parent/parent_login.html')
+                            return render_template('Administrator/login.html')
                     else:
                         flash("Error! Please Register Your Account and Then Login!", "danger")
-                        return render_template('Parent/parent_login.html')
+                        return render_template('Administrator/login.html')
                 else:
                     flash("Error! Invalid CNIC, Please Contact to Administrator!", "danger")
-                    return render_template('Parent/parent_login.html')
+                    return render_template('Administrator/login.html')
             except Exception as e:
                 # If an error occurs during database connection, display error message
                 db.session.rollback()
                 flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-                return render_template('Parent/parent_login.html')
-        return render_template('Parent/parent_login.html')
+                return render_template('Administrator/login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/parent_register', methods=['POST', 'GET'])
@@ -150,9 +176,9 @@ def parent_profile():
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return render_template('Parent/parent_login.html')
+            return render_template('Administrator/login.html')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/disable_role_parent/<int:UserId>')
@@ -171,7 +197,7 @@ def disable_role_parent(UserId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/parent_profile')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/enable_role_parent/<int:UserId>')
@@ -190,7 +216,7 @@ def enable_role_parent(UserId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/parent_profile')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/change_password_parent/<int:UserId>', methods=['POST', 'GET'])
@@ -220,7 +246,7 @@ def change_password_parent(UserId):
             return redirect('/parent_profile')  # Add return statement here
     else:
         # Render the form for GET requests
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/parent_for_update/<int:UserId>', methods=['POST', 'GET'])
@@ -253,7 +279,7 @@ def parent_for_update(UserId):
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
             return redirect('/parent_profile')  # Add return statement here
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/apply_to_formb', methods=['POST', 'GET'])
@@ -278,7 +304,7 @@ def apply_to_formb():
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/parent_dashboard')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/add_one_time_parent_data', methods=['POST', 'GET'])
@@ -336,7 +362,7 @@ def add_one_time_parent_data():
             flash(f"Failed to connect to the database. -> Error: {str(e)}", "danger")
             return redirect('/apply_to_formb')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 # @app.route('/add_new_child', methods=['POST', 'GET'])
@@ -382,7 +408,7 @@ def add_one_time_parent_data():
 #             flash(f"Failed to connect to the database. -> Error: {str(e)}", "danger")
 #             return redirect('/apply_to_formb')
 #     else:
-#         return render_template('Parent/parent_login.html')
+#         return render_template('Administrator/login.html')
 
 
 @app.route('/update_child_data/<int:CompId>', methods=['POST', 'GET'])
@@ -408,7 +434,7 @@ def update_child_data(CompId):
             flash(f"Error: {str(e)}", "danger")
             return redirect('/apply_to_formb')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route('/request_for_formb/<int:UserId>', methods=['POST', 'GET'])
@@ -432,7 +458,7 @@ def request_for_formb(UserId):
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
             return redirect('/parent_dashboard')
     else:
-        return render_template('Parent/parent_login.html')
+        return render_template('Administrator/login.html')
 
 
 @app.route("/logout_parent")
@@ -443,4 +469,4 @@ def logout_parent():
     session.pop('p_UserId', None)
     session.pop('p_photo', None)
     session.pop('p_rol_name', None)
-    return render_template('Parent/parent_login.html')
+    return render_template('Administrator/login.html')

@@ -44,54 +44,258 @@
          <div class="container">
             <div class="center verticle_center full_height">
                <div class="login_section">
-                  <div class="logo_login">
-                     <div class="center">
-                        <h1 style="color: white; font-weight: 500; font-size: 32px;">Admin/Manager/Employee Login</h1>
+
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                     <li class="nav-item" role="presentation">
+                       <button class="nav-link btn btn-success active" id="parent-tab" data-toggle="tab" data-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="true">Parent</button>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                       <button class="nav-link btn btn-success" id="deliveryBoy-tab" data-toggle="tab" data-target="#deliveryBoy" type="button" role="tab" aria-controls="deliveryBoy" aria-selected="false">Delivery Boy</button>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                       <button class="nav-link btn btn-success" id="administrator-tab" data-toggle="tab" data-target="#administrator" type="button" role="tab" aria-controls="administrator" aria-selected="false">Administrator</button>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                       <button class="nav-link btn btn-success" id="manager-tab" data-toggle="tab" data-target="#manager" type="button" role="tab" aria-controls="manager" aria-selected="false">Manager</button>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                        <button class="nav-link btn btn-success" id="employee-tab" data-toggle="tab" data-target="#employee" type="button" role="tab" aria-controls="employee" aria-selected="false">Employee</button>
+                      </li>
+                   </ul>
+                   
+                   <div class="tab-content">
+                     <div class="tab-pane active" id="parent" role="tabpanel" aria-labelledby="parent-tab">
+                        <div class="logo_login">
+                           <div class="center">
+                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Parent Login</h1>
+                           </div>
+                        </div>
+                        <div class="login_form">
+                           <div class="field">
+                              {% with messages = get_flashed_messages(with_categories=true) %}
+                                  {% if messages %}
+                                      {% for category, message in messages %}
+                                          <div class="alert alert-{{ category }} alert-dismissible">
+                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                              <strong>{{ message|capitalize }}.</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endwith %}
+                           </div>
+                           <form class="user" action="/parent_login" method="post">
+                              <fieldset>
+                                 <div class="field">
+                                    <label class="label_field">CNIC</label>
+                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)"
+                                    maxlength="13" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="password" placeholder="Password" />
+                                 </div>
+                                 
+                                 <div class="field row mt-3">
+                                    <button type="submit" class="main_bt btn-block">
+                                       <i class="fa fa-lock fa-fw"></i>Login
+                                    </button>
+                                 </div>
+                                 <div class="field row mt-3">
+                                    <a href="/parent_register" class="register_bt btn-block">
+                                       <i class="fa fa-user-plus fa-fw"></i> Register
+                                    </a>
+                                 </div>
+                              </fieldset>
+                           </form>
+      
+                        </div>
                      </div>
-                  </div>
-                  <div class="login_form">
-                     <div class="field">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ category }} alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                        <strong>{{ message|capitalize }}.</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
+                     <div class="tab-pane" id="deliveryBoy" role="tabpanel" aria-labelledby="deliveryBoy-tab">
+                        <div class="logo_login">
+                           <div class="center">
+                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Delivery Boy Login</h1>
+                           </div>
+                        </div>
+                        <div class="login_form">
+                           <div class="field">
+                              {% with messages = get_flashed_messages(with_categories=true) %}
+                                  {% if messages %}
+                                      {% for category, message in messages %}
+                                          <div class="alert alert-{{ category }} alert-dismissible">
+                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                              <strong>{{ message|capitalize }}.</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endwith %}
+                           </div>
+                           <form class="user" action="/parent_login" method="post">
+                              <fieldset>
+                                 <div class="field">
+                                    <label class="label_field">CNIC</label>
+                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)"
+                                    maxlength="13" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="password" placeholder="Password" />
+                                 </div>
+                                 
+                                 <div class="field row mt-3">
+                                    <button type="submit" class="main_bt btn-block">
+                                       <i class="fa fa-lock fa-fw"></i>Login
+                                    </button>
+                                 </div>
+                                 <div class="field row mt-3">
+                                    <a href="/delivery_boy_register" class="register_db_bt btn-block">
+                                       <i class="fa fa-user-plus fa-fw"></i>Register
+                                    </a>
+                                 </div>
+                              </fieldset>
+                           </form>
+      
+                        </div>
                      </div>
-                     <form class="user" action="/admin_login" method="post">
-                        <fieldset>
+                     <div class="tab-pane" id="administrator" role="tabpanel" aria-labelledby="administrator-tab">
+                        <div class="logo_login">
+                           <div class="center">
+                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Administrator Login</h1>
+                           </div>
+                        </div>
+                        <div class="login_form">
                            <div class="field">
-                              <label class="label_field">CNIC</label>
-                              <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)"
-                              maxlength="13" />
+                              {% with messages = get_flashed_messages(with_categories=true) %}
+                                  {% if messages %}
+                                      {% for category, message in messages %}
+                                          <div class="alert alert-{{ category }} alert-dismissible">
+                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                              <strong>{{ message|capitalize }}.</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endwith %}
                            </div>
+                           <form class="user" action="/admin_login" method="post">
+                              <fieldset>
+                                 <div class="field">
+                                    <label class="label_field">CNIC</label>
+                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)" minlength="13"
+                                    maxlength="13" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="password" placeholder="Password" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field hidden">hidden label</label>
+                                    <label class="form-check-label"><input type="checkbox" name="remember_me" class="form-check-input"> Remember Me</label>
+                                    <a class="forgot" href="#">Forgotten Password?</a>
+                                 </div>
+                                 
+                                 <div class="field row mt-3">
+                                    <button type="submit" class="main_bt btn-block">
+                                       <i class="fa fa-lock fa-fw"></i>Login
+                                    </button>
+                                 </div>
+                              </fieldset>
+                           </form>
+                        </div>
+                     </div>
+                     <div class="tab-pane" id="manager" role="tabpanel" aria-labelledby="manager-tab">
+                        <div class="logo_login">
+                           <div class="center">
+                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Manager Login</h1>
+                           </div>
+                        </div>
+                        <div class="login_form">
                            <div class="field">
-                              <label class="label_field">Password</label>
-                              <input type="password" name="password" placeholder="Password" />
+                              {% with messages = get_flashed_messages(with_categories=true) %}
+                                  {% if messages %}
+                                      {% for category, message in messages %}
+                                          <div class="alert alert-{{ category }} alert-dismissible">
+                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                              <strong>{{ message|capitalize }}.</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endwith %}
                            </div>
+                           <form class="user" action="/admin_login" method="post">
+                              <fieldset>
+                                 <div class="field">
+                                    <label class="label_field">CNIC</label>
+                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)" minlength="13"
+                                    maxlength="13" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="password" placeholder="Password" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field hidden">hidden label</label>
+                                    <label class="form-check-label"><input type="checkbox" name="remember_me" class="form-check-input"> Remember Me</label>
+                                    <a class="forgot" href="#">Forgotten Password?</a>
+                                 </div>
+                                 
+                                 <div class="field row mt-3">
+                                    <button type="submit" class="main_bt btn-block">
+                                       <i class="fa fa-lock fa-fw"></i>Login
+                                    </button>
+                                 </div>
+                              </fieldset>
+                           </form>
+                        </div>
+                     </div>
+                     <div class="tab-pane" id="employee" role="tabpanel" aria-labelledby="employee-tab">
+                        <div class="logo_login">
+                           <div class="center">
+                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Employee Login</h1>
+                           </div>
+                        </div>
+                        <div class="login_form">
                            <div class="field">
-                              <label class="label_field hidden">hidden label</label>
-                              <label class="form-check-label"><input type="checkbox" name="remember_me" class="form-check-input"> Remember Me</label>
-                              <a class="forgot" href="#">Forgotten Password?</a>
+                              {% with messages = get_flashed_messages(with_categories=true) %}
+                                  {% if messages %}
+                                      {% for category, message in messages %}
+                                          <div class="alert alert-{{ category }} alert-dismissible">
+                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                              <strong>{{ message|capitalize }}.</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endwith %}
                            </div>
-                           
-                           <div class="field row mt-3">
-                              <button type="submit" class="main_bt btn-block">
-                                 <i class="fa fa-lock fa-fw"></i>Login
-                              </button>
-                           </div>
-                           <div class="field row mt-3">
-                              <a href="/parent_login" class="register_bt btn-block">
-                                 <i class="fa fa-lock fa-fw"></i> Goto Parent Login
-                              </a>
-                           </div>
-                        </fieldset>
-                     </form>
-                  </div>
+                           <form class="user" action="/admin_login" method="post">
+                              <fieldset>
+                                 <div class="field">
+                                    <label class="label_field">CNIC</label>
+                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)" minlength="13"
+                                    maxlength="13" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="password" placeholder="Password" />
+                                 </div>
+                                 <div class="field">
+                                    <label class="label_field hidden">hidden label</label>
+                                    <label class="form-check-label"><input type="checkbox" name="remember_me" class="form-check-input"> Remember Me</label>
+                                    <a class="forgot" href="#">Forgotten Password?</a>
+                                 </div>
+                                 
+                                 <div class="field row mt-3">
+                                    <button type="submit" class="main_bt btn-block">
+                                       <i class="fa fa-lock fa-fw"></i>Login
+                                    </button>
+                                 </div>
+                              </fieldset>
+                           </form>
+                        </div>
+                     </div>
+                   </div>
+                   
+                   
+
+                  
                </div>
             </div>
          </div>
@@ -129,6 +333,16 @@
                  return false;
              return true;
          }
-     </script>
+      </script>
+
+      <script>
+         $(function () {
+            // $('#myTab li:last-child button').tab('show')
+            $('button[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+            event.target // newly activated tab
+            event.relatedTarget // previous active tab
+            })
+         })
+      </script>
    </body>
 </html>
