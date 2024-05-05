@@ -1,0 +1,211 @@
+{% extends "Employee/employee_layout.html" %}
+{% block body %} 
+                  <!-- Work/Task Area container-fluid inner -->
+                  <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                              <h2 class="d-inline-block">Add New User & Details</h2>
+                              <a href="#" data-toggle="modal" data-target="#addNewAdministratorModal" class="btn btn-primary btn-lg float-right">Add New User</a>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Add a modal for Add New Administrator -->
+                    <div class="modal fade" id="addNewAdministratorModal" tabindex="-1" role="dialog" aria-labelledby="addNewAdministratorModalLabel" aria-hidden="true">
+                     <div class="modal-dialog modal-md" role="document">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <h5 class="modal-title" id="addNewAdministratorModalLabel">Add New User</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                     <span aria-hidden="true">&times;</span>
+                                 </button>
+                             </div>
+                             <div class="modal-body">
+                                 <!-- Form to Add Employee -->
+                                 <form action="/manager_role" method="post">
+                                     <div class="row mt-3">
+                                         <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Name *</b></label>
+                                             <input type="text" class="form-control" name="name" placeholder="Name" required/>
+                                         </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                          <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Select Role *</b></label>
+                                             <select name="user_role" class="form-control" required>
+                                                <option value="Employee" selected>Employee</option>
+                                                <option value="Parent">Parent</option>
+                                                <option value="DeliveryBoy">DeliveryBoy</option>
+                                             </select>
+                                          </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                          <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>CNIC *</b></label>
+                                             <input type="text" class="form-control" name="cnic" placeholder="11101xxxxxxx3" onkeypress="return onlyNumberKey(event)" maxlength="13" required/>
+                                          </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                          <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Phone No *</b></label>
+                                             <input type="text" class="form-control" name="phone" placeholder="03xxxxxxxxx" onkeypress="return onlyNumberKey(event)" maxlength="11" required/>
+                                          </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                          <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Gender *</b></label>
+                                             <select name="gender" class="form-control" required>
+                                                <option value="Male" selected>Male</option>
+                                                <option value="Female">Female</option>
+                                             </select>
+                                          </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                         <div class="col-md-12">
+                                             <label for="exampleInputRD" style="color: black;"><b>Password *</b></label>
+                                             <input type="password" class="form-control" name="password" placeholder="************" required />
+                                         </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                       <div class="col-md-12">
+                                           <label for="exampleInputRD" style="color: black;"><b>Conform Password *</b></label>
+                                           <input type="password" class="form-control" name="conform_password" placeholder="************" required />
+                                       </div>
+                                     </div>
+                                     <div class="row mt-3">
+                                         <div class="col-md-12 col-sm-12"> 
+                                             <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Add User</b></button> 
+                                         </div>
+                                     </div>
+                                 </form>
+                             </div>
+                         </div>
+                     </div>
+                     </div>
+                     <!-- End Add a modal for Add New User -->
+
+
+                     <!-- start row -->
+                     <div class="row">
+                        <!-- start table section Hover Table -->
+                        <div class="col-md-12">
+                           <div class="white_shd full margin_bottom_30">
+                              <div class="full graph_head">
+                                 <div class="heading1 margin_0">
+                                    <h2>User Details</h2>
+                                 </div>
+                              </div>
+                              <div class="table_section padding_infor_info">
+                                 <div class="table-responsive-sm">
+                                    <table class="table table-hover">
+                                       <thead class="thead-light">
+                                          <tr>
+                                             <th>Id#</th>
+                                             <th>Name</th>
+                                             <th>Date</th>
+                                             <th>Role_Description</th>
+                                             <th>CNIC</th>
+                                             <th>Phone</th>
+                                             <th>Gender</th>
+                                             <th>Action</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for role in role_with_Cnic_data %}
+                                          <tr>
+                                             <td>{{loop.index}}</td>
+                                             <td>{{role.name}}</td>
+                                             <td>{{role.created_at}}</td>
+                                             <td>{{role.rol_name}}</td>
+                                             <td>{{role.cnic}}</td>
+                                             <td>{{role.phone}}</td>
+                                             <td>{{role.gender}}</td>
+                                             <td>
+                                                <div class="btn-group">
+                                                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                     Action
+                                                   </button>
+                                                   <div class="dropdown-menu">
+                                                     <a href="#" data-toggle="modal" data-target="#updateManagerModal{{ role.user_id }}" class="btn btn-primary btn-circle btn-block btn-md" href="#">Update</a>
+                                                     {% if role.isActive == 1 %}
+                                                      <a href="{{url_for('disable_role_manager', UserId=role.user_id)}}" class="btn btn-danger btn-circle btn-block btn-md">
+                                                         <i class="fa fa-trash"> Disable Now</i>
+                                                      </a>
+                                                      {% else %}
+                                                      <a href="{{url_for('enable_role_manager', UserId=role.user_id)}}" class="btn btn-success btn-circle btn-block btn-md">
+                                                         <i class="fa fa-handshake"> Enable Now</i>
+                                                      </a>
+                                                      {% endif %}
+                                                   </div>
+                                                 </div>
+                                             </td>
+                                          </tr>
+                                          <!-- Add a modal for Add New User -->
+                                          <div class="modal fade" id="updateManagerModal{{ role.user_id }}" tabindex="-1" role="dialog" aria-labelledby="updateManagerModalLabel" aria-hidden="true">
+                                             <div class="modal-dialog modal-md" role="document">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                         <h5 class="modal-title" id="updateManagerModalLabel">Update User</h5>
+                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                         </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                         <!-- Form to Add Employee -->
+                                                         <form action="{{url_for('manager_for_update', UserId=role.user_id)}}" method="post">
+                                                            <div class="row mt-3">
+                                                               <div class="col-md-12">
+                                                                     <label for="exampleInputRD" style="color: black;"><b>Name *</b></label>
+                                                                     <input type="text" class="form-control" name="name" value="{{role.name}}" placeholder="User Name" required/>
+                                                               </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                  <div class="col-md-12">
+                                                                     <label for="exampleInputRD" style="color: black;"><b>CNIC *</b></label>
+                                                                     <input type="text" class="form-control" name="cnic" value="{{role.cnic}}" placeholder="11101xxxxxxx3" onkeypress="return onlyNumberKey(event)" maxlength="13" required/>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                  <div class="col-md-12">
+                                                                     <label for="exampleInputRD" style="color: black;"><b>Phone No *</b></label>
+                                                                     <input type="text" class="form-control" name="phone" value="{{role.phone}}" placeholder="03xxxxxxxxx" onkeypress="return onlyNumberKey(event)" maxlength="11" required/>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                  <div class="col-md-12">
+                                                                     <label for="exampleInputRD" style="color: black;"><b>Gender *</b></label>
+                                                                     <select name="gender" class="form-control" required>
+                                                                        <option value="{{ role.gender }}" style="background-color: rgb(0, 255, 17);" selected>{{ role.gender }}</option>
+                                                                        <option value="Male">Male</option>
+                                                                        <option value="Female">Female</option>
+                                                                     </select>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                               <div class="col-md-12 col-sm-12"> 
+                                                                     <button type="submit" class="btn btn-primary btn-lg btn-block"><b>Update User</b></button> 
+                                                               </div>
+                                                            </div>
+                                                         </form>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <!-- End Add a modal for Add New User -->
+
+                                       {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- end table section Hover Table -->
+                     </div>
+                     <!-- end row -->
+
+                     
+                  </div>
+                  
+{% endblock %}                 

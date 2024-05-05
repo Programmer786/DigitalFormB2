@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Digital Form-B</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      
+      <!-- site icon -->
+      <link rel="icon" href="{{ url_for('static', filename='images/huraira-150x150.png') }}" type="image/png"/>
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css"/>
+      <!-- site css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css"/>
+      <!-- responsive css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" type="text/css"/>
+      <!-- For Light theme color css -->
+      <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/color_2.css') }}" type="text/css"/> -->
+      <!-- select bootstrap -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-select.css') }}" type="text/css"/>
+      <!-- scrollbar css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/perfect-scrollbar.css') }}" type="text/css"/>
+      <!-- custom css -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" type="text/css"/>
+      <!-- Include Cropper.js CSS -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/cropper.css') }}" type="text/css">
+      <!-- This for table and Main welcome dashboard page tiles design css -->
+      <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome_page_design.css') }}" type="text/css"/> -->
+      <!-- From AdminLTE Ion icons -->
+      <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+      <!-- From AdminLTE Theme style -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/dist/css/adminlte.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE Font Awesome -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/fontawesome-free/css/all.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE Ion icons -->
+      <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+      <!-- From AdminLTE Tempus dominus Bootstrap 4 -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE iCheck -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE JQVMap -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/jqvmap/jqvmap.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE Theme style -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/dist/css/adminlte.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE overlayScrollbars -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}" type="text/css"/>
+      <!-- From AdminLTE Date range picker -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/daterangepicker/daterangepicker.css') }}" type="text/css"/>
+      <!-- From AdminLTE summer note -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/summernote/summernote-bs4.min.css') }}" type="text/css"/>
+      <!-- From DataTables bootstrap4 design searching, next buttons -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" type="text/css"/>
+      <!-- From DataTables to Responsive  force a resize action since the column might go from hidden -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}" type="text/css"/>
+      <!-- From DataTables buttons  design -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}" type="text/css"/>
+   </head>
+   <body class="dashboard dashboard_1">
+      <div class="full_container">
+         <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+               <div class="sidebar_blog_1">
+                  <div class="sidebar-header">
+                     <div class="logo_section">
+                        <a href="/">
+                           {% if session.photo %}
+                              <img class="logo_icon img-responsive" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                           {% else %}
+                              <img class="logo_icon img-responsive" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
+                           {% endif %}
+                        </a>
+                     </div>
+                  </div>
+                  <div class="sidebar_user_info">
+                     <div class="icon_setting"></div>
+                     <div class="user_profle_side">
+                        <div class="user_img">
+                           {% if session.photo %}
+                              <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                           {% else %}
+                              <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
+                           {% endif %}
+                        </div>
+                        <div class="user_info">
+                           <h6>
+                              {% if session.name %}
+                              {{ session.name }}
+                             {% else %}
+                              Admin
+                             {% endif %}
+                           </h6>
+                           <p><span class="online_animation"></span> Online</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- Start sidebar_blog_2 for  Employee-->
+              {% if session.rol_name == 'Employee' %}
+               <div class="sidebar_blog_2">
+                  {% if session.rol_name %}
+                  <h4 style="font-weight: bold; font-size: x-large;">{{ session.rol_name }}</h4>
+                  {% endif %}
+                  <ul class="list-unstyled components">
+                     <li class="active">
+                        <a href="/"><i class="fas fa-tachometer-alt yellow_color"></i> <span> Dashboard</span></a>
+                     </li>
+                     <li><a href="/employee_role"><i class="fa fa-user-plus chartreuse_color"></i> <span>Add Users</span></a></li>
+                     <li><a href="/view_request"><i class="fa fa-bank rauf_color2"></i> <span>View Request</span></a></li>
+                     <li><a href="/view_forward"><i class="fa fa-balance-scale blue2_color"></i> <span>View Forward</span></a></li>
+
+                     <li><a href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-sign-out-alt red_color"></i> <span>Logout</span></a></li>
+                  </ul>
+               </div>
+               <!-- End sidebar_blog_2 for  Employee-->
+              {% else %}
+               <!-- Start sidebar_blog_2 for  Nothing-->
+               <script>
+                  // Perform logout and clear session
+                  // Add your code to clear the session here
+              
+                  // Redirect to the logout URL or perform any other necessary actions
+                  window.location.href = "/logout"; // Change the URL accordingly
+              </script>
+              {% endif %}
+            </nav>
+            <!-- end sidebar -->
+            <!-- right content -->
+            <div id="content">
+               <!-- topbar -->
+               <div class="topbar">
+                  <nav class="navbar navbar-expand-lg navbar-light">
+                     <div class="full">
+                        <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                        <div class="right_topbar">
+                           <div class="icon_info">
+                              <ul>
+                                 <li><a href="#"><i class="far fa-bell"></i><span class="badge">2</span></a></li>
+                                 <li><a href="#"><i class="far fa-question-circle"></i></a></li>
+                                 <!-- <li><a href="#"><i class="fa fa-envelope"></i><span class="badge">3</span></a></li> -->
+                              </ul>
+                              <ul class="user_profile_dd">
+                                 <li>
+                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                       {% if session.photo %}
+                                          <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                                       {% else %}
+                                          <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
+                                       {% endif %}
+                                       <span class="name_user">
+                                       {% if session.name %}
+                                        {{ session.name }}
+                                       {% else %}
+                                        Admin
+                                       {% endif %}
+                                    </span></a>
+                                    <div class="dropdown-menu">
+                                       <a class="dropdown-item" href="/employee_profile">Update Profile</a>
+                                       <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </nav>
+               </div>
+               <!-- end topbar -->
+               <!-- dashboard inner -->
+               <div class="midde_cont">
+                  <div class="field">
+                     {% with messages = get_flashed_messages(with_categories=true) %}
+                         {% if messages %}
+                             {% for category, message in messages %}
+                                 <div class="alert alert-{{ category }} alert-dismissible">
+                                     <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                     <strong><b>{{ message|capitalize }}.</b></strong>
+                                 </div>
+                             {% endfor %}
+                         {% endif %}
+                     {% endwith %}
+                  </div>
+                  
+                  {% block body %} 
+                     <!-- Put Work/Task Area container-fluid inner -->
+                  {% endblock %}
+                  
+
+                  <!-- footer -->
+                  <div class="container-fluid">
+                     <div class="footer">
+                        <p>Copyright © 2023 All rights reserved.<br><br>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- end dashboard inner -->
+                  <!-- Logout Modal-->
+                  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                     <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                              <div class="modal-footer">
+                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                 <a class="btn btn-primary" href="/logout">Logout</a>
+                              </div>
+                        </div>
+                     </div>
+                  <!-- END Logout Modal-->
+                  </div>
+            </div>
+         </div>
+      </div>
+      <!-- Admin LTE jQuery -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
+      <!-- <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script> -->
+      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+      <!-- wow animation -->
+      <script src="{{ url_for('static', filename='js/animate.js') }}"></script>
+      <!-- select country -->
+      <script src="{{ url_for('static', filename='js/bootstrap-select.js') }}"></script>
+      <!-- owl carousel -->
+      <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script> 
+      <!-- chart js -->
+      <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+      <!-- nice scrollbar -->
+      <script src="{{ url_for('static', filename='js/perfect-scrollbar.min.js') }}"></script>
+      <script>
+         var ps = new PerfectScrollbar('#sidebar');
+      </script>
+      <!-- custom js -->
+      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+      <!-- Include Cropper.js JavaScript -->
+      <script src="{{ url_for('static', filename='js/cropper.js') }}"></script>
+      <!-- This file for custom dropdown list for province, district,tehsils -->
+      <script src="{{ url_for('static', filename='js/dropdown_province.js') }}"></script>
+
+      <!-- Start AdminLTE JS Files -->
+      <!-- jQuery UI 1.11.4 -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+      <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+      <script>
+      $.widget.bridge('uibutton', $.ui.button)
+      </script>
+      <!-- Bootstrap 4 -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+      <!-- ChartJS -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/chart.js/Chart.min.js') }}"></script>
+      <!-- Sparkline -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/sparklines/sparkline.js') }}"></script>
+      <!-- JQVMap -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+      <!-- jQuery Knob Chart -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+      <!-- daterangepicker -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/moment/moment.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
+      <!-- Tempusdominus Bootstrap 4 -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+      <!-- Summernote -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
+      <!-- overlayScrollbars -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+      <!-- AdminLTE App -->
+      <script src="{{ url_for('static', filename='AdminLTE/dist/js/adminlte.js') }}"></script>
+      
+      <!-- DataTables Data Searching  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+      <!-- DataTables Design Bootstrap  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+      <!-- DataTables Design responsive  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+      <!-- DataTables responsive bootstrap4  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+      <!-- DataTables dataTables buttons  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+      <!-- DataTables buttons bootstrap4  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+      <!-- DataTables jszip  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/jszip/jszip.min.js') }}"></script>
+      <!-- DataTables pdfmake  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/pdfmake/pdfmake.min.js') }}"></script>
+      <!-- DataTables pdfmake  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/pdfmake/pdfmake.min.js') }}"></script>
+      <!-- DataTables pdfmake  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/pdfmake/pdfmake.min.js') }}"></script>
+      <!-- DataTables pdfmake vfs_fonts  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/pdfmake/vfs_fonts.js') }}"></script>
+      <!-- DataTables buttons html5  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+      <!-- DataTables buttons print  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+      <!-- DataTables buttons column Visibility  & Plugins -->
+      <script src="{{ url_for('static', filename='AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+      <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+      <script src="{{ url_for('static', filename='AdminLTE/dist/js/pages/dashboard.js') }}"></script>
+      <!-- End AdminLTE JS Files -->
+      <!-- Page specific script for Datatables Download Button Action Reports -->
+      <!-- <script>
+         $(function () {
+            $("#table_EXPANSE").DataTable({
+               "responsive": true, 
+               "lengthChange": false, 
+               "autoWidth": false,
+               "buttons": ["copy", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#table_EXPANSE_wrapper .col-md-6:eq(0)');
+
+            $("#table_ASSETS").DataTable({
+               "responsive": true, 
+               "lengthChange": false, 
+               "autoWidth": false,
+               "buttons": ["copy", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#table_ASSETS_wrapper .col-md-6:eq(0)');
+
+            $('#example2').DataTable({
+               "paging": true,
+               "lengthChange": false,
+               "searching": false,
+               "ordering": true,
+               "info": true,
+               "autoWidth": false,
+               "responsive": true,
+            });
+         });
+      </script> -->
+      <!-- 2nd option for table -->
+      <script src="{{ url_for('static', filename='search_datatable_custom.js') }}"></script>
+      <!--  Only ASCII character in that range allowed -->
+      <script>
+         function onlyNumberKey(evt) {
+              
+             // Only ASCII character in that range allowed
+             var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+             if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                 return false;
+             return true;
+         }
+     </script>
+
+      <script>
+         $(document).ready(function() {
+            $(".btn-circle.btn-danger").click(function() {
+               $("#userDeleteModal").modal("show");
+            });
+         });
+      </script>
+      <script>
+         // Set the default value to the current date for all elements with class "salary-date"
+         $(document).ready(function() {
+           $('.salary-date').each(function() {
+             $(this).val(new Date().toISOString().split('T')[0]);
+           });
+         });
+       </script>
+      <!-- Predefined Date Ranges code -->
+      <script src="{{ url_for('static', filename='js/searching_record.js') }}"></script>
+      <!-- Predefined Date Ranges code -->
+      <script src="{{ url_for('static', filename='js/select_date_range.js') }}"></script>
+
+   </body>
+</html>
