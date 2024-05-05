@@ -9,20 +9,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 
-@app.route("/manager_dashboard")
-def manager_dashboard():
+@app.route("/employee_dashboard")
+def employee_dashboard():
     if 'cnic' and 'rol_name' in session:
-        return render_template('Manager/index.html')
+        return render_template('Employee/index.html')
     else:
-        return render_template('Manager/login.html')
+        return render_template('Employee/login.html')
 
 
-@app.route('/manager_role', methods=['POST', 'GET'])
-def manager_role():
+@app.route('/employee_role', methods=['POST', 'GET'])
+def employee_role():
     if 'cnic' and 'rol_name' in session:
         try:
             # role_with_Cnic_data_retrieve = Users.query.order_by(Users.user_id).all()
-            cell_values = ["Employee", "Parent", "DeliveryBoy"]
+            cell_values = ["Parent", "DeliveryBoy"]
             role_with_rol_name_data_retrieve = Users.query.filter(
                 Users.rol_name.in_(cell_values)
             ).all()
@@ -57,7 +57,7 @@ def manager_role():
                                 db.session.add(new_entry_register_user)
                                 db.session.commit()
                                 flash("Successfully Register.", "success")
-                                return redirect('/manager_role')
+                                return redirect('/employee_role')
                             else:
                                 flash(
                                     "Error! The Account is Already Registered So goto Login otherwise Contact to your Administrator. "
@@ -71,27 +71,27 @@ def manager_role():
                     # If an error occurs during database connection, display error message
                     db.session.rollback()
                     flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
-                    return redirect('/manager_role')
+                    return redirect('/employee_role')
             else:
-                return render_template('Manager/manager_role.html', role_with_Cnic_data=role_with_rol_name_data_retrieve)
+                return render_template('Employee/employee_role.html', role_with_Cnic_data=role_with_rol_name_data_retrieve)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return render_template('Manager/login.html')
+            return render_template('Employee/login.html')
     else:
-        return render_template('Manager/login.html')
+        return render_template('Employee/login.html')
 
 
-@app.route('/manager_profile', methods=['POST', 'GET'])
-def manager_profile():
+@app.route('/employee_profile', methods=['POST', 'GET'])
+def employee_profile():
     if 'cnic' and 'rol_name' in session:
         try:
             # role_with_Cnic_data_retrieve = Users.query.order_by(Users.user_id).all()
             session_UserId = session['UserId']
             one_record_by_cnic_data_retrieve = Users.query.filter_by(user_id=session_UserId).first()
 
-            return render_template('Manager/manager_profile.html', one_record_data_retrieve=one_record_by_cnic_data_retrieve)
+            return render_template('Employee/employee_profile.html', one_record_data_retrieve=one_record_by_cnic_data_retrieve)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
@@ -101,8 +101,8 @@ def manager_profile():
         return render_template('Administrator/login.html')
 
 
-@app.route('/manager_for_update/<int:UserId>', methods=['POST', 'GET'])
-def manager_for_update(UserId):
+@app.route('/employee_for_update/<int:UserId>', methods=['POST', 'GET'])
+def employee_for_update(UserId):
     if 'cnic' and 'rol_name' in session:
         try:
             # get specific user SNo from clerk Table and then check date with SNo related
@@ -125,17 +125,17 @@ def manager_for_update(UserId):
             db.session.add(update_user)
             db.session.commit()
             flash("Record Successfully Updated", "success")
-            return redirect('/manager_role')
+            return redirect('/employee_role')
         except IntegrityError:
             db.session.rollback()
             flash("Error. Duplicate CNIC and Phone Number Not Acceptable", "danger")
-            return redirect('/manager_role')  # Add return statement here
+            return redirect('/employee_role')  # Add return statement here
     else:
         return render_template('Administrator/login.html')
 
 
-@app.route('/disable_role_manager/<int:UserId>')
-def disable_role_manager(UserId):
+@app.route('/disable_role_employee/<int:UserId>')
+def disable_role_employee(UserId):
     if 'cnic' and 'rol_name' in session:
         try:
             # get specific user user_id from clerk Table and then check date with UserId related
@@ -143,18 +143,18 @@ def disable_role_manager(UserId):
             sel_one_user.isActive = 0
             db.session.commit()
             flash("Record Successfully Disable", "success")
-            return redirect('/manager_role')
+            return redirect('/employee_role')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return redirect('/manager_role')
+            return redirect('/employee_role')
     else:
         return render_template('Administrator/login.html')
 
 
-@app.route('/enable_role_manager/<int:UserId>')
-def enable_role_manager(UserId):
+@app.route('/enable_role_employee/<int:UserId>')
+def enable_role_employee(UserId):
     if 'cnic' and 'rol_name' in session:
         try:
             # get specific user user_id from clerk Table and then check date with UserId related
@@ -162,18 +162,18 @@ def enable_role_manager(UserId):
             sel_one_user.isActive = 1
             db.session.commit()
             flash("Record Successfully Enable", "success")
-            return redirect('/manager_role')
+            return redirect('/employee_role')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return redirect('/manager_role')
+            return redirect('/employee_role')
     else:
         return render_template('Administrator/login.html')
 
 
-@app.route('/change_password_manager/<int:UserId>', methods=['POST', 'GET'])
-def change_password_manager(UserId):
+@app.route('/change_password_employee/<int:UserId>', methods=['POST', 'GET'])
+def change_password_employee(UserId):
     if 'cnic' and 'rol_name' in session:
         try:
             # Retrieve form data
@@ -189,30 +189,30 @@ def change_password_manager(UserId):
                 db.session.add(update_user_password)
                 db.session.commit()
                 flash("Password changed successfully.", "success")
-                return redirect('/manager_profile')
+                return redirect('/employee_profile')
             else:
                 flash("Error! Your confirm password is wrong, please try again", "danger")
-                return redirect('/manager_profile')
+                return redirect('/employee_profile')
         except IntegrityError:
             db.session.rollback()
             flash("Error. Duplicate CNIC Not Acceptable", "danger")
-            return redirect('/manager_profile')  # Add return statement here
+            return redirect('/employee_profile')  # Add return statement here
     else:
         # Render the form for GET requests
         return render_template('Administrator/login.html')
 
 
-@app.route('/view_request', methods=['POST', 'GET'])
-def view_request():
+@app.route('/view_request_employee', methods=['POST', 'GET'])
+def view_request_employee():
     if 'cnic' and 'rol_name' in session:
         try:
-            # Retrieve the parent data where view_request is False
+            # Retrieve the parent data where view_request_employee is False
             forward_to_admin_0 = ParentData.query.filter_by(forward_to_admin=False).all()
 
             # Initialize an empty list to store par_id values
             par_ids = []
 
-            # Extract par_id values from the view_request_0 list
+            # Extract par_id values from the view_request_employee_0 list
             for parent_data in forward_to_admin_0:
                 par_ids.append(parent_data.par_id)
 
@@ -224,28 +224,28 @@ def view_request():
                 .filter(ChildData.par_id.in_(par_ids))
                 .all()
             )
-            return render_template('Manager/view_request.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
+            return render_template('Employee/view_request_employee.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
                                    forward_to_admin_0=forward_to_admin_0)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return redirect('/manager_dashboard')
+            return redirect('/employee_dashboard')
     else:
         return render_template('Administrator/login.html')
 
 
-@app.route('/view_forward', methods=['POST', 'GET'])
-def view_forward():
+@app.route('/view_forward_employee', methods=['POST', 'GET'])
+def view_forward_employee():
     if 'cnic' and 'rol_name' in session:
         try:
-            # Retrieve the parent data where view_request is False
+            # Retrieve the parent data where view_forward_employee is False
             forward_to_admin_0 = ParentData.query.filter_by(forward_to_admin=True).all()
 
             # Initialize an empty list to store par_id values
             par_ids = []
 
-            # Extract par_id values from the view_request_0 list
+            # Extract par_id values from the view_forward_employee_0 list
             for parent_data in forward_to_admin_0:
                 par_ids.append(parent_data.par_id)
 
@@ -257,19 +257,19 @@ def view_forward():
                 .filter(ChildData.par_id.in_(par_ids))
                 .all()
             )
-            return render_template('Manager/view_forward.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
+            return render_template('Employee/view_forward_employee.html', childs_formb_data_retrieve=childs_formb_data_retrieve,
                                    forward_to_admin_0=forward_to_admin_0)
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
-            return redirect('/manager_dashboard')
+            return redirect('/employee_dashboard')
     else:
         return render_template('Administrator/login.html')
 
 
-@app.route('/form_forward_to_admin/<int:ParId>')
-def form_forward_to_admin(ParId):
+@app.route('/form_forward_to_admin_by_employee/<int:ParId>')
+def form_forward_to_admin_by_employee(ParId):
     if 'cnic' and 'rol_name' in session:
         try:
             sel_one_parent_data = ParentData.query.filter_by(par_id=ParId).first()
@@ -277,7 +277,7 @@ def form_forward_to_admin(ParId):
             sel_one_parent_data.status = 'Processing'
             db.session.commit()
             flash("Record Successfully Forward to Admin", "success")
-            return redirect('/view_request')
+            return redirect('/view_request_employee')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()
@@ -287,8 +287,8 @@ def form_forward_to_admin(ParId):
         return render_template('Administrator/login.html')
 
 
-@app.route('/rejected_submitted_form/<int:ParId>')
-def rejected_submitted_form(ParId):
+@app.route('/rejected_submitted_form_by_employee/<int:ParId>')
+def rejected_submitted_form_by_employee(ParId):
     if 'cnic' and 'rol_name' in session:
         try:
             sel_one_parent_data = ParentData.query.filter_by(par_id=ParId).first()
@@ -296,7 +296,7 @@ def rejected_submitted_form(ParId):
             sel_one_parent_data.forward_to_admin = True
             db.session.commit()
             flash("Record Successfully Rejected", "success")
-            return redirect('/view_request')
+            return redirect('/view_request_employee')
         except Exception as e:
             # If an error occurs during database connection, display error message
             db.session.rollback()

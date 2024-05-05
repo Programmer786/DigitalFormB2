@@ -11,7 +11,6 @@ app.permanent_session_lifetime = timedelta(hours=5)
 # Database configuration for the online MySQL database on cPanel
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://cmsfarca_app:Pakistan007!!!@cp6.mywebsitebox.com/digital_form_b'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/digital_form_b'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/cms_application'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 # Set the upload folder

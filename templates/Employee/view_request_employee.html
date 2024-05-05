@@ -134,12 +134,12 @@
                                                       <hr style="border-top: 3px solid #00ff1e;" />
                                                       <div class="row mt-3">
                                                          <div class="col-md-6 col-sm-12"> 
-                                                            <a href="{{url_for('form_forward_to_admin', ParId=formb.par_id)}}" class="btn btn-success btn-lg btn-block">
+                                                            <a href="{{url_for('form_forward_to_admin_by_employee', ParId=formb.par_id)}}" class="btn btn-success btn-lg btn-block">
                                                                <i class="fa fa-handshake"> Forward To Admin</i>
                                                             </a>
                                                          </div>
                                                          <div class="col-md-6 col-sm-12"> 
-                                                            <a href="{{url_for('rejected_submitted_form', ParId=formb.par_id)}}" class="btn btn-danger btn-lg btn-block">
+                                                            <a href="{{url_for('rejected_submitted_form_by_employee', ParId=formb.par_id)}}" class="btn btn-danger btn-lg btn-block">
                                                                <i class="fa fa-trash"> Rejected</i>
                                                             </a>
                                                          </div>

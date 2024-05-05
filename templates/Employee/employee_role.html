@@ -23,7 +23,7 @@
                              </div>
                              <div class="modal-body">
                                  <!-- Form to Add Employee -->
-                                 <form action="/manager_role" method="post">
+                                 <form action="/employee_role" method="post">
                                      <div class="row mt-3">
                                          <div class="col-md-12">
                                              <label for="exampleInputRD" style="color: black;"><b>Name *</b></label>
@@ -129,11 +129,11 @@
                                                    <div class="dropdown-menu">
                                                      <a href="#" data-toggle="modal" data-target="#updateManagerModal{{ role.user_id }}" class="btn btn-primary btn-circle btn-block btn-md" href="#">Update</a>
                                                      {% if role.isActive == 1 %}
-                                                      <a href="{{url_for('disable_role_manager', UserId=role.user_id)}}" class="btn btn-danger btn-circle btn-block btn-md">
+                                                      <a href="{{url_for('disable_role_employee', UserId=role.user_id)}}" class="btn btn-danger btn-circle btn-block btn-md">
                                                          <i class="fa fa-trash"> Disable Now</i>
                                                       </a>
                                                       {% else %}
-                                                      <a href="{{url_for('enable_role_manager', UserId=role.user_id)}}" class="btn btn-success btn-circle btn-block btn-md">
+                                                      <a href="{{url_for('enable_role_employee', UserId=role.user_id)}}" class="btn btn-success btn-circle btn-block btn-md">
                                                          <i class="fa fa-handshake"> Enable Now</i>
                                                       </a>
                                                       {% endif %}
@@ -153,7 +153,7 @@
                                                    </div>
                                                    <div class="modal-body">
                                                          <!-- Form to Add Employee -->
-                                                         <form action="{{url_for('manager_for_update', UserId=role.user_id)}}" method="post">
+                                                         <form action="{{url_for('employee_for_update', UserId=role.user_id)}}" method="post">
                                                             <div class="row mt-3">
                                                                <div class="col-md-12">
                                                                      <label for="exampleInputRD" style="color: black;"><b>Name *</b></label>

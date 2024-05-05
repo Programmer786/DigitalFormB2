@@ -12,7 +12,29 @@ from datetime import datetime, date
 @app.route("/")
 def home():
     if 'cnic' and 'rol_name' in session:
-        return render_template('Administrator/index.html')
+        # Get today's date
+        today = date.today()
+        # Fetch real data from the database complaint.status == 'Pending'
+        total_request = Requests.query.count()
+        total_complaints_pending = Complaints.query.filter_by(status='Pending').count()
+        total_complaints = Complaints.query.count()
+        total_parent_data = ParentData.query.count()
+        total_child_data = ChildData.query.count()
+        total_delivery_boy = DeliveryBoyHandover.query.count()
+        total_users = Users.query.filter(Users.rol_name != 'parent').count()
+        total_manager = Users.query.filter_by(rol_name='Manager').count()
+        total_employee = Users.query.filter_by(rol_name='Employee').count()
+
+        return render_template('Administrator/index.html',
+                               total_request=total_request,
+                               total_complaints_pending=total_complaints_pending,
+                               total_complaints=total_complaints,
+                               total_parent_data=total_parent_data,
+                               total_child_data=total_child_data,
+                               total_delivery_boy=total_delivery_boy,
+                               total_users=total_users,
+                               total_manager=total_manager,
+                               total_employee=total_employee)
     else:
         return render_template('Administrator/login.html')
 
@@ -25,6 +47,8 @@ def admin_login():
             return redirect('/')
         elif session_rol_name == 'Manager':
             return redirect('/manager_dashboard')
+        elif session_rol_name == 'Employee':
+            return redirect('/employee_dashboard')
         elif session_rol_name == 'Parent':
             return redirect('/parent_dashboard')
         else:
@@ -54,6 +78,8 @@ def admin_login():
                                 return redirect('/')
                             elif user.rol_name == 'Manager':
                                 return redirect('/manager_dashboard')
+                            elif user.rol_name == 'Employee':
+                                return redirect('/employee_dashboard')
                             elif user.rol_name == 'Parent':
                                 return redirect('/parent_dashboard')
                             else:
@@ -245,7 +271,7 @@ def enable_role_user(UserId):
             return render_template('Administrator/login.html')
     else:
         return render_template('Administrator/login.html')
-        
+
 
 @app.route('/change_password/<int:UserId>', methods=['POST', 'GET'])
 def change_password(UserId):
@@ -295,7 +321,7 @@ def view_request_formb():
             for parent_data in forward_to_admin_0:
                 par_ids.append(parent_data.par_id)
 
-            print("Par_ids: ",par_ids)
+            print("Par_ids: ", par_ids)
             # Query ChildData where par_id is in the list of extracted par_ids
             childs_formb_data_retrieve = (
                 ChildData.query
@@ -313,6 +339,7 @@ def view_request_formb():
     else:
         return render_template('Administrator/login.html')
 
+
 @app.route('/view_forward_formb', methods=['POST', 'GET'])
 def view_forward_formb():
     if 'cnic' and 'rol_name' in session:
@@ -327,7 +354,7 @@ def view_forward_formb():
             for parent_data in forward_to_admin_0:
                 par_ids.append(parent_data.par_id)
 
-            print("Par_ids: ",par_ids)
+            print("Par_ids: ", par_ids)
             # Query ChildData where par_id is in the list of extracted par_ids
             childs_formb_data_retrieve = (
                 ChildData.query
@@ -370,7 +397,7 @@ def all_form_b_record():
             for parent_data in forward_to_admin_0:
                 par_ids.append(parent_data.par_id)
 
-            print("Par_ids: ",par_ids)
+            print("Par_ids: ", par_ids)
             # Query ChildData where par_id is in the list of extracted par_ids
             childs_formb_data_retrieve = (
                 ChildData.query
@@ -489,6 +516,7 @@ def admin_finalized_formb(ParId):
             return render_template('Administrator/login.html')
     else:
         return render_template('Administrator/login.html')
+
 
 @app.route('/rejected_submitted_form/<int:ParId>')
 def rejected_submitted_form1(ParId):

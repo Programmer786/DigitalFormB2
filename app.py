@@ -9,6 +9,7 @@ app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'Pakistan007$$$')
 # Importing controllers and routes
 from user_controller import *
 from manager_controller import *
+from employee_controller import *
 from parent_controller import *
 from complaint_controller import *
 from delivery_boy_controller import *
