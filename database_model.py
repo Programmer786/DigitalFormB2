@@ -1,7 +1,7 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta, datetime
-from sqlalchemy import create_engine, Numeric, text
+from sqlalchemy import create_engine
 import os
 from flask_migrate import Migrate
 
@@ -110,7 +110,7 @@ class Contacts(db.Model):
     users = db.relationship('Users', backref=db.backref('contacts', lazy=True))
 
 
-class ParentData(db.Model):  # This table use for a Apply Form
+class ParentData(db.Model):  # This table use it for an Apply Form
     __tablename__ = 'parent_data'
     par_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
@@ -125,7 +125,7 @@ class ParentData(db.Model):  # This table use for a Apply Form
     received_comment = db.Column(db.String(255), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(50), nullable=False)  # e.g., 'Pending', 'Processing', 'Complete', 'Rejected'
-    delivery_status = db.Column(db.String(20), default='No', nullable=True)  # e.g., 'No', 'Not_Received', 'Received' No:- its means no any process for delivery
+    delivery_status = db.Column(db.String(20), default='No', nullable=True)  # e.g., 'No', 'Not_Received', 'Received' No: - its means no any process for delivery
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     forward_to_admin = db.Column(db.Boolean, default=False, nullable=False)
@@ -151,14 +151,14 @@ class ChildData(db.Model):
     parent_data = db.relationship('ParentData', backref=db.backref('child_data', lazy=True))
 
 
-# Create province model. The table name "province" will automatically be assigned to the model’s table.
+# Create a province model. The table name "province" will automatically be assigned to the model’s table.
 class Province(db.Model):
     __tablename__ = 'province'
     province_sno = db.Column(db.Integer, primary_key=True)
     province_name = db.Column(db.String(50), unique=True, nullable=False)
 
 
-# Create District model. The table name "district" will automatically be assigned to the model’s table.
+# Create a District model. The table name "district" will automatically be assigned to the model’s table.
 class District(db.Model):
     __tablename__ = 'district'
     district_sno = db.Column(db.Integer, primary_key=True)
@@ -180,3 +180,18 @@ class DeliveryBoyHandover(db.Model):
     # Define relationships if needed
     users = db.relationship('Users', backref=db.backref('delivery_boy_handover', lazy=True))
     parent_data = db.relationship('ParentData', backref=db.backref('delivery_boy_handover', lazy=True))
+
+
+class Notification(db.Model):
+    __tablename__ = 'notification'
+    n_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    notification_info = db.Column(db.String(50), nullable=True)
+    is_check_by_manager = db.Column(db.Boolean, nullable=True)
+    is_check_by_employee = db.Column(db.Boolean, nullable=True)
+    is_check_by_parent = db.Column(db.Boolean, nullable=True)
+    is_check_by_delivery_boy = db.Column(db.Boolean, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Define relationships if needed
+    users = db.relationship('Users', backref=db.backref('notification', lazy=True))

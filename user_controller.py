@@ -49,8 +49,6 @@ def admin_login():
             return redirect('/manager_dashboard')
         elif session_rol_name == 'Employee':
             return redirect('/employee_dashboard')
-        elif session_rol_name == 'Parent':
-            return redirect('/parent_dashboard')
         else:
             return redirect('/logout')
     else:
@@ -80,8 +78,6 @@ def admin_login():
                                 return redirect('/manager_dashboard')
                             elif user.rol_name == 'Employee':
                                 return redirect('/employee_dashboard')
-                            elif user.rol_name == 'Parent':
-                                return redirect('/parent_dashboard')
                             else:
                                 return redirect('/logout')
 
