@@ -1,9 +1,8 @@
 from sqlalchemy.orm import joinedload
 from app import app
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import asc, desc
+from sqlalchemy import asc
 from database_model import *
-# from database_model import db, Users,Rol
 from flask import render_template, flash, session, request, redirect, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
@@ -106,8 +105,8 @@ def parent_register():
             r_phone = request.form.get('phone')
             r_cnic = request.form.get('cnic')
             r_gender = request.form.get('gender')
-            get_employee_province_sno = request.form.get('employee_province_sno')
-            get_employee_district_sno = request.form.get('employee_district_sno')
+            # get_employee_province_sno = request.form.get('employee_province_sno')
+            # get_employee_district_sno = request.form.get('employee_district_sno')
             # r_address = request.form.get('address')
             r_password = request.form.get('password')
             r_conform_password = request.form.get('conform_password')
@@ -125,8 +124,8 @@ def parent_register():
                             cnic=r_cnic,
                             gender=r_gender,
                             rol_name='Parent',
-                            employee_province_sno=get_employee_province_sno,
-                            employee_district_sno=get_employee_district_sno,
+                            # employee_province_sno=get_employee_province_sno,
+                            # employee_district_sno=get_employee_district_sno,
                             # address=r_address,
                             password=change_to_hashed_password,
                             created_at=datetime.now(),

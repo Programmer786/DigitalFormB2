@@ -50,9 +50,6 @@
                        <button class="nav-link btn btn-success active" id="parent-tab" data-toggle="tab" data-target="#parent" type="button" role="tab" aria-controls="parent" aria-selected="true">Parent</button>
                      </li>
                      <li class="nav-item" role="presentation">
-                       <button class="nav-link btn btn-success" id="deliveryBoy-tab" data-toggle="tab" data-target="#deliveryBoy" type="button" role="tab" aria-controls="deliveryBoy" aria-selected="false">Delivery Boy</button>
-                     </li>
-                     <li class="nav-item" role="presentation">
                        <button class="nav-link btn btn-success" id="administrator-tab" data-toggle="tab" data-target="#administrator" type="button" role="tab" aria-controls="administrator" aria-selected="false">Administrator</button>
                      </li>
                      <li class="nav-item" role="presentation">
@@ -103,52 +100,6 @@
                                  <div class="field row mt-3">
                                     <a href="/parent_register" class="register_bt btn-block">
                                        <i class="fa fa-user-plus fa-fw"></i> Register
-                                    </a>
-                                 </div>
-                              </fieldset>
-                           </form>
-      
-                        </div>
-                     </div>
-                     <div class="tab-pane" id="deliveryBoy" role="tabpanel" aria-labelledby="deliveryBoy-tab">
-                        <div class="logo_login">
-                           <div class="center">
-                              <h1 style="color: white; font-weight: 500; font-size: 42px;">Delivery Boy Login</h1>
-                           </div>
-                        </div>
-                        <div class="login_form">
-                           <div class="field">
-                              {% with messages = get_flashed_messages(with_categories=true) %}
-                                  {% if messages %}
-                                      {% for category, message in messages %}
-                                          <div class="alert alert-{{ category }} alert-dismissible">
-                                              <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                              <strong>{{ message|capitalize }}.</strong>
-                                          </div>
-                                      {% endfor %}
-                                  {% endif %}
-                              {% endwith %}
-                           </div>
-                           <form class="user" action="/parent_login" method="post">
-                              <fieldset>
-                                 <div class="field">
-                                    <label class="label_field">CNIC</label>
-                                    <input type="text" name="cnic" placeholder="xxxxxxxxxxxxx" onkeypress="return onlyNumberKey(event)" minlength="13"
-                                    maxlength="13" />
-                                 </div>
-                                 <div class="field">
-                                    <label class="label_field">Password</label>
-                                    <input type="password" name="password" placeholder="Password" />
-                                 </div>
-                                 
-                                 <div class="field row mt-3">
-                                    <button type="submit" class="main_bt btn-block">
-                                       <i class="fa fa-lock fa-fw"></i>Login
-                                    </button>
-                                 </div>
-                                 <div class="field row mt-3">
-                                    <a href="/delivery_boy_register" class="register_db_bt btn-block">
-                                       <i class="fa fa-user-plus fa-fw"></i>Register
                                     </a>
                                  </div>
                               </fieldset>

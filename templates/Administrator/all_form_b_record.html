@@ -32,7 +32,6 @@
                                              <th>M.CNIC</th>
                                              <th>Address</th>
                                              <th>Form-B</th>
-                                             <th>HandOver To DB</th>
                                           </tr>
                                        </thead>
                                        <tbody>
@@ -49,51 +48,7 @@
                                                    <i class="fa fa-print"> Print</i>
                                                 </a>
                                              </td>
-                                             <td>
-                                                {% if formb.delivery_status == 'No' %}
-                                                   <a href="#" data-toggle="modal" data-target="#viewHandOverFormBDataModal{{ formb.par_id }}" class="btn btn-success btn-circle btn-block btn-md">
-                                                      <i class="fa fa-handshake"> HandOver Form-B</i>
-                                                   </a>
-                                                {% else %}
-                                                   <a href="#" class="btn btn-primary btn-circle btn-block btn-md disabled" tabindex="-1" role="button" aria-disabled="true">
-                                                      <i class="fa fa-truck"> On The Way</i>
-                                                   </a>
-                                                {% endif %}
-                                             </td>
                                           </tr>
-                                          <!-- View a modal for View Form B -->
-                                          <div class="modal fade" id="viewHandOverFormBDataModal{{ formb.par_id }}" tabindex="-1" role="dialog" aria-labelledby="viewHandOverFormBDataModalLabel" aria-hidden="true">
-                                             <div class="modal-dialog modal-sm" role="document">
-                                                <div class="modal-content">
-                                                   <div class="modal-header">
-                                                         <h5 class="modal-title" id="viewHandOverFormBDataModalLabel">HandOver Form-B To Delivery Boy </h5>
-                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                         </button>
-                                                   </div>
-                                                   <div class="modal-body">
-                                                      <form action="{{url_for('form_b_handover_to_db', ParId=formb.par_id)}}" method="post">
-                                                         <div class="row mt-3">
-                                                            <div class="col-md-12">
-                                                                  <label for="exampleInputRD" style="color: black;"><b>Delivery Boy Name *</b></label>
-                                                                  <select class="form-control" name="delivery_boy_name" id="delivery-boy-name" required>
-                                                                     {% for delivery in delivery_boy %}
-                                                                        <option value="{{ delivery.user_id }}">{{ delivery.name }}</option>
-                                                                     {% endfor %}
-                                                                  </select>
-                                                            </div>
-                                                         </div>                                                      
-                                                         <div class="row mt-3">
-                                                            <div class="col-md-12 col-sm-12"> 
-                                                               <button type="submit" class="btn btn-success btn-lg btn-block"><b><i class="fa fa-handshake"> HandOver</i></b></button> 
-                                                            </div>
-                                                         </div>
-                                                      </form>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <!-- End view a modal for View Form B -->
                                        {% endfor %}
                                        </tbody>
                                     </table>

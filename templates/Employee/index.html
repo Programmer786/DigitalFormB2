@@ -2,21 +2,79 @@
 {% block body %} 
     <!-- Work/Task Area container-fluid inner -->
     <div class="container-fluid">
-      <div class="row column_title">
-          <div class="col-md-12">
-              <div class="page_title">
-                  <h2>Dashboard</h2>
-              </div>
-          </div>
-      </div>
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Dashboard</h2>
+                </div>
+            </div>
+        </div>
 
-      <!-- Small boxes (Stat box) -->
+        <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-lg-12 col-6">
-                <h1>WELCOME TO DASHBOARD</h1>
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>{{ total_complaints_pending }}</h3>
+
+                  <p>Total Complaints Pending</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{ total_complaints }}</h3>
+
+                  <p>Total Complaints</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-stalker"></i>
+                </div>
+                <a href="/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3>{{ total_parent_data }}<sup style="font-size: 20px"></sup></h3>
+
+                  <p>Today Parents</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3>{{ total_child_data }}<sup style="font-size: 20px"></sup></h3>
+
+                  <p>Total Child </p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
             </div>
         </div>
         <!-- /.row -->
+
+         <hr>   <!-- horizontal rule -->
 
 
 

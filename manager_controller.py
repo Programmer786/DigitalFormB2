@@ -38,7 +38,30 @@ def manager_dashboard():
         session.pop('notification_data', None)
         # notification data send to session
         notification_data_send_into_session()
-        return render_template('Manager/index.html')
+
+        # Get today's date
+        today = date.today()
+        # Fetch real data from the database complaint.status == 'Pending'
+        total_request = Requests.query.count()
+        total_complaints_pending = Complaints.query.filter_by(status='Pending').count()
+        total_complaints = Complaints.query.count()
+        total_parent_data = ParentData.query.count()
+        total_child_data = ChildData.query.count()
+        total_delivery_boy = DeliveryBoyHandover.query.count()
+        total_users = Users.query.filter(Users.rol_name != 'parent').count()
+        total_manager = Users.query.filter_by(rol_name='Manager').count()
+        total_employee = Users.query.filter_by(rol_name='Employee').count()
+
+        return render_template('Manager/index.html',
+                               total_request=total_request,
+                               total_complaints_pending=total_complaints_pending,
+                               total_complaints=total_complaints,
+                               total_parent_data=total_parent_data,
+                               total_child_data=total_child_data,
+                               total_delivery_boy=total_delivery_boy,
+                               total_users=total_users,
+                               total_manager=total_manager,
+                               total_employee=total_employee)
     else:
         return render_template('Administrator/login.html')
 
