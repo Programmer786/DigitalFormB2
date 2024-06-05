@@ -46,6 +46,8 @@ def employee_dashboard():
         total_complaints_pending = Complaints.query.filter_by(status='Pending').count()
         total_complaints = Complaints.query.count()
         total_parent_data = ParentData.query.count()
+        total_form_b_request = ParentData.query.filter_by(forward_to_admin=False).count()
+        total_form_b_forward = ParentData.query.filter_by(forward_to_admin=True).count()
         total_child_data = ChildData.query.count()
         total_delivery_boy = DeliveryBoyHandover.query.count()
         total_users = Users.query.filter(Users.rol_name != 'parent').count()
@@ -61,7 +63,9 @@ def employee_dashboard():
                                total_delivery_boy=total_delivery_boy,
                                total_users=total_users,
                                total_manager=total_manager,
-                               total_employee=total_employee)
+                               total_employee=total_employee,
+                               total_form_b_request=total_form_b_request,
+                               total_form_b_forward=total_form_b_forward)
     else:
         return render_template('Administrator/login.html')
 
