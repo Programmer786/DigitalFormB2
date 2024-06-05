@@ -72,7 +72,7 @@
                      <div class="logo_section">
                         <a href="/">
                            {% if session.photo %}
-                              <img class="logo_icon img-responsive" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                              <img class="logo_icon img-responsive" src="{{ url_for('static', filename='files/' + session.photo) }}" alt="Profile Picture">
                            {% else %}
                               <img class="logo_icon img-responsive" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
                            {% endif %}
@@ -84,7 +84,7 @@
                      <div class="user_profle_side">
                         <div class="user_img">
                            {% if session.photo %}
-                              <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                              <img class="img-responsive rounded-circle" style="width: 75px; height: 75px;" src="{{ url_for('static', filename='files/' + session.photo) }}" alt="Profile Picture">
                            {% else %}
                               <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
                            {% endif %}
@@ -147,7 +147,7 @@
                                  <li>
                                     <a class="dropdown-toggle" data-toggle="dropdown">
                                        {% if session.photo %}
-                                          <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/image_folder/' + session.photo) }}" alt="Profile Picture">
+                                          <img class="img-responsive rounded-circle" style="width: 40px; height: 35px;" src="{{ url_for('static', filename='files/' + session.photo) }}" alt="Profile Picture">
                                        {% else %}
                                           <img class="img-responsive rounded-circle" src="{{ url_for('static', filename='images/layout_img/user_img.jpg') }}" alt="Default Profile Picture">
                                        {% endif %}
@@ -159,7 +159,8 @@
                                        {% endif %}
                                     </span></a>
                                     <div class="dropdown-menu">
-                                       <a class="dropdown-item" href="/profile">Update Profile</a>
+                                       <a class="dropdown-item" href="/profile">Update Profile <i class="fa fa-wrench fa-fw ms-auto text-body text-opacity-50"></i></a>
+                                       <a class="dropdown-item d-flex align-items-center" href="#" data-toggle="modal" data-target="#updateProfileImageModal{{ session.UserId }}">Profile Picture <i class="fa fa-file-image wrench fa-fw ms-auto text-body text-opacity-50"></i></a>
                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
                                     </div>
                                  </li>
@@ -199,26 +200,57 @@
                   </div>
                </div>
                <!-- end dashboard inner -->
-                  <!-- Logout Modal-->
-                  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                  aria-hidden="true">
-                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                              <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                 </button>
-                              </div>
-                              <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                              <div class="modal-footer">
-                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                 <a class="btn btn-primary" href="/logout">Logout</a>
-                              </div>
-                        </div>
+               <!-- Start Logout Modal-->
+               <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+               aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                           <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">×</span>
+                              </button>
+                           </div>
+                           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                           <div class="modal-footer">
+                              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                              <a class="btn btn-primary" href="/logout">Logout</a>
+                           </div>
                      </div>
-                  <!-- END Logout Modal-->
                   </div>
+               <!-- END Logout Modal-->
+               </div>
+               <!-- End Logout Modal-->
+
+               <!-- Add a modal for Update Profile Image -->
+               <div class="modal fade" id="updateProfileImageModal{{ session.UserId }}">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <!-- START #Form to Update Profile -->
+                        <form action="{{url_for('update_profile_image', UserId=session.UserId)}}" method="post" enctype="multipart/form-data">
+                           <div class="modal-header">
+                              <h5 class="modal-title">Update Profile Image</h5>
+                              <button type="button" class="btn-close" data-dismiss="modal"></button>
+                           </div>
+                           <div class="modal-body">
+                              <div class="form-group">
+                                 <label for="profile_image" style="color: black;"><b>Profile New Image</b></label>
+                                 <input type="file" class="form-control" name="p_image" id="profile_image" accept=".jpg, .jpeg" onchange="displayImg(this, $('#cimg'))" required />
+                              </div>
+                              <div class="form-group mt-2 d-flex justify-content-center">
+                                 <img src="" alt="" id="cimg" class="img-fluid img-thumbnail" width="300px" height="300px">
+                              </div>                                            
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Update Profile Image</button>
+                           </div>
+                        </form>
+                        <!--END #Form to Update Profile Image -->
+                     </div>
+                  </div>
+               </div>
+               <!-- End Modal for Update Profile -->
             </div>
          </div>
       </div>
@@ -369,6 +401,20 @@
       <script src="{{ url_for('static', filename='js/searching_record.js') }}"></script>
       <!-- Predefined Date Ranges code -->
       <script src="{{ url_for('static', filename='js/select_date_range.js') }}"></script>
+
+      <!-- For Profile Image change -->
+      <script>
+         function displayImg(input, imgElement) {
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+               imgElement.attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+         }
+      </script>
 
    </body>
 </html>
