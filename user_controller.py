@@ -98,7 +98,7 @@ def admin_login():
                     flash("Error! Invalid CNIC, Please Contact to Administrator!", "danger")
                     return render_template('Administrator/login.html')
             except Exception as e:
-                # If an error occurs during database connection, display error message
+                # If an error occurs during database connection, display an error message
                 db.session.rollback()
                 flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
                 return render_template('Administrator/login.html')

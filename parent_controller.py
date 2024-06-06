@@ -1,3 +1,5 @@
+import random
+
 from sqlalchemy.orm import joinedload
 from app import app
 from sqlalchemy.exc import IntegrityError
@@ -455,6 +457,53 @@ def request_for_formb(UserId):
             # If an error occurs during database connection, display error message
             db.session.rollback()
             flash(f"Failed to connect to the database. -> Error: {str(e)}" "", "danger")
+            return redirect('/parent_dashboard')
+    else:
+        return render_template('Administrator/login.html')
+
+
+@app.route('/update_parent_profile_image/<int:UserId>', methods=['GET', 'POST'])
+def update_parent_profile_image(UserId):
+    if 'p_cnic' and 'p_rol_name' in session:
+        try:
+            if request.method == 'POST':
+                # First delete the file
+                user = Users.query.get_or_404(UserId)
+                file_path = None  # Initialize file_path with a default value
+                if user.photo is not None:
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], user.photo)  # Construct the full path to the file
+                # Delete the file from the directory
+                if file_path is not None and os.path.exists(file_path):
+                    os.remove(file_path)
+
+                # Get New Image Path
+                get_uploaded_p_image = request.files['p_image']
+
+                if get_uploaded_p_image:
+                    session.pop('p_photo', None)
+                    # Get the original file extension
+                    _, file_extension = os.path.splitext(get_uploaded_p_image.filename)
+                    # Generate a random 4-digit number
+                    random_number = random.randint(1000000, 9999999)
+                    # p_UserId Get from Session
+                    get_user_id = session['p_UserId']
+                    # Combine random_number, employee ID, and file extension to create a custom filename
+                    custom_filename = f"{random_number}_{get_user_id}{file_extension}"
+                    # Save the file and update the database record with the file path
+                    file_path_system = os.path.join(app.config['UPLOAD_FOLDER'], custom_filename)  # Set your upload folder path
+                    file_full_name = os.path.join("", custom_filename)  # Set your No path for database column
+                    get_uploaded_p_image.save(file_path_system)
+                    user.photo = file_full_name
+                    session['p_photo'] = file_full_name
+
+                db.session.commit()
+                flash("Profile Image Successfully Updated", "success")
+                return redirect('/parent_dashboard')
+            else:
+                return redirect('/parent_dashboard')
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error: {str(e)}", "danger")
             return redirect('/parent_dashboard')
     else:
         return render_template('Administrator/login.html')
